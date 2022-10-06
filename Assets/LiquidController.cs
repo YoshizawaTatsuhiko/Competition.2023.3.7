@@ -25,15 +25,39 @@ public class LiquidController : MonoBehaviour
     [SerializeField] float _areaOfInfluence = 0f;
     /// <summary>粒子の質量</summary>
     [SerializeField] float _particleMass = 1f;
-    /// <summary>密度</summary>
+    /// <summary>密度の計算</summary>
     [SerializeField] float _density = 1f;
+
     void Start()
     {
         _density = 315 / 64 * Mathf.PI * Mathf.Pow(_areaOfInfluence, 9);  //密度の計算
     }
 
-    void Update()
+    /// <summary>粒子の密度の計算</summary>
+    /// <param name="particle"></param>
+    void CalcDencity(ParticleElements[] particle)
     {
-        
+        float aoi2 = _areaOfInfluence * _areaOfInfluence;  //_areaOfInfluence の2乗を計算しておく
+
+        for(int i = 0; i < particle.Length; i++)
+        {
+            var nowParticle = particle[i];
+            float sum = 0f;
+
+            for(int j = 0; j < particle.Length; j++)
+            {
+                if (i == j) continue;
+
+                var nearParticle = particle[j];
+                Vector3 particleDistence = nearParticle.position - nowParticle.position;
+                float pd2 = Vector3.Dot(particleDistence, particleDistence);
+
+                if(pd2 < aoi2)
+                {
+                    sum += Mathf.Pow(aoi2 - pd2, 3);
+                }
+            }
+            nowParticle.density = sum * _density;
+        }
     }
 }
