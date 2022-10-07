@@ -19,7 +19,7 @@ class ParticleElements
     public float pressure;
 }
 
-public class LiquidController : MonoBehaviour
+class LiquidController : MonoBehaviour
 {
     /// <summary>影響範囲</summary>
     [SerializeField] float _areaOfInfluence = 0f;
@@ -34,7 +34,7 @@ public class LiquidController : MonoBehaviour
     }
 
     /// <summary>粒子の密度の計算</summary>
-    /// <param name="particle"></param>
+    /// <param name="particle">粒子の要素</param>
     void CalcDencity(ParticleElements[] particle)
     {
         float aoi2 = _areaOfInfluence * _areaOfInfluence;  //_areaOfInfluence の2乗を計算しておく
@@ -58,6 +58,21 @@ public class LiquidController : MonoBehaviour
                 }
             }
             nowParticle.density = sum * _density;
+        }
+    }
+
+    /// <summary>圧力係数</summary>
+    [SerializeField] float _pressureCoefficient = 200f;
+    /// <summary>外力がかかってないときの密度</summary>
+    [SerializeField] float _restDensity = 1000f;
+
+    /// <summary>粒子にかかる圧力を計算</summary>
+    /// <param name="particles">粒子の要素</param>
+    void CalcPressure(ParticleElements[] particles)
+    {
+        for(int i = 0; i < particles.Length; i++)
+        {
+            particles[i].pressure = _pressureCoefficient * (particles[i].density - _restDensity);
         }
     }
 }
