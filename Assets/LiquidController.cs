@@ -47,14 +47,14 @@ class LiquidController : MonoBehaviour
 
     /// <summary>粒子の密度の計算</summary>
     /// <param name="particles">粒子の要素</param>
-    void CalcDencity(ParticleElements[] particles)
+    void CalcLiquid(ParticleElements[] particles)
     {
         float aoi2 = _areaOfInfluence * _areaOfInfluence;  //_areaOfInfluence の2乗を計算しておく
 
         for(int i = 0; i < particles.Length; i++)
         {
             var nowParticle = particles[i];
-            float sum = 0f;
+            float sumDensity = 0f;
             particles[i].pressure = _pressureCoefficient * (particles[i].density - _restDensity);
 
 
@@ -68,10 +68,10 @@ class LiquidController : MonoBehaviour
 
                 if(pd2 < aoi2)
                 {
-                    sum += Mathf.Pow(aoi2 - pd2, 3);
+                    sumDensity += Mathf.Pow(aoi2 - pd2, 3);
                 }
             }
-            nowParticle.density = sum * _density;
+            nowParticle.density = sumDensity * _density;            
         }
     }
 }
