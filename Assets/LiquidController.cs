@@ -56,6 +56,7 @@ class LiquidController : MonoBehaviour
             var nowParticle = particles[i];
             float sumDensity = 0f;
             particles[i].pressure = _pressureCoefficient * (particles[i].density - _restDensity);
+            float sumPressure = 0f;
 
 
             for (int j = 0; j < particles.Length; j++)
