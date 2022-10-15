@@ -74,5 +74,12 @@ public class MetaBalls : MonoBehaviour
     public void ToggleNoise(bool b)
     {
         ParticleSystem.NoiseModule n = _particleSystem.noise;
+        n.enabled = b;
+    }
+
+    public void ChangeSpeed(float newSpeed)
+    {
+        ParticleSystem.MainModule main = _particleSystem.main;
+        main.startSpeedMultiplier = newSpeed * _speed;
     }
 }
