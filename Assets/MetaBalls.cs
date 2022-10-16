@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class MetaBalls : MonoBehaviour
 {
+    /// <summar>対象のマテリアル</summary>
     Material _mat = default;
+    /// <summary></summary>
     ParticleSystem _particleSystem = default;
+    /// <summary></summary>
     ParticleSystem.Particle[] _particles = default;
+    /// <summary></summary>
     List<Vector4> _particlesPos;
+    /// <summary>パーティクルの速度</summary>
     float _speed = 1f;
 
     void Start()
@@ -31,6 +36,8 @@ public class MetaBalls : MonoBehaviour
         _mat.GetVectorArray("PrticlePos", _particlesPos);
     }
 
+    /// <summary>パーティクルの動作(ON/OFF)を切り替える</summary>
+    /// <returns></returns>
     public bool TogglePlay()
     {
         if (_particleSystem.isPlaying)
@@ -44,9 +51,11 @@ public class MetaBalls : MonoBehaviour
         return _particleSystem.isPlaying;
     }
 
-    public void TogglePlay(bool b)
+    /// <summary>パーティクルの動作(ON/OFF)を切り替える</summary>
+    /// <param name="exchange">ON/OFFを切り替える</param>
+    public void TogglePlay(bool exchange)
     {
-        if(b)
+        if(exchange)
         {
             _particleSystem.Play();
         }
@@ -56,6 +65,8 @@ public class MetaBalls : MonoBehaviour
         }
     }
 
+    /// <summary>パーティクルに乱気流(ばらつき)を発生させる</summary>
+    /// <returns></returns>
     public bool ToggleNoise()
     {
         ParticleSystem.NoiseModule n = _particleSystem.noise;
@@ -71,12 +82,16 @@ public class MetaBalls : MonoBehaviour
         return n.enabled;
     }
 
-    public void ToggleNoise(bool b)
+    /// <summary></summary>
+    /// <param name="exchange"></param>
+    public void ToggleNoise(bool exchange)
     {
         ParticleSystem.NoiseModule n = _particleSystem.noise;
-        n.enabled = b;
+        n.enabled = exchange;
     }
 
+    /// <summary>パーティクルの速度を変化させる</summary>
+    /// <param name="newSpeed">速度更新の値</param>
     public void ChangeSpeed(float newSpeed)
     {
         ParticleSystem.MainModule main = _particleSystem.main;
