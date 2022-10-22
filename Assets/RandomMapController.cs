@@ -7,6 +7,7 @@ public class RandomMapController : MonoBehaviour
 {
     /// <summary>壁生成開始地点候補</summary>
     List<(int, int)> _startPoint = new List<(int, int)>();
+    /// <summary>ゴール地点候補の座標を格納する</summary>
     List<(int, int)> _goalPosition = new List<(int, int)>();
 
     /// <summary>マップを自動生成する</summary>
