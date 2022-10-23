@@ -48,6 +48,7 @@ public class RandomMapController : MonoBehaviour
         {
             //•Ç‚ğL‚Î‚·•ûŒü‚ÌŒó•â‚ğƒŠƒXƒg‚ÉŠi”[‚·‚é
             List<string> direction = new List<string>();
+            //•Ç‚ğL‚Î‚¹‚é‚©‚ğŠm”F‚·‚é
             if (map[x, y - 1] == "F" && map[x, y - 2] == "F") direction.Add("UP");
             if (map[x, y + 1] == "F" && map[x, y + 2] == "F") direction.Add("DOWN");
             if (map[x - 1, y] == "F" && map[x - 2, y] == "F") direction.Add("LEFT");
