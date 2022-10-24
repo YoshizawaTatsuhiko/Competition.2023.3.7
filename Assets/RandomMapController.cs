@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>生成する度に変化するマップを生み出す</summary>
 public class RandomMapController : MonoBehaviour
@@ -16,19 +17,21 @@ public class RandomMapController : MonoBehaviour
     public void GenerateMap(int width, int height)
     {
         //渡された値が 5未満だったら、エラーを返す
-        if (width <= 5 || height <= 5) throw new System.ArgumentOutOfRangeException();
+        if (width < 5 || height < 5) throw new System.ArgumentOutOfRangeException();
         //渡された値が奇数なら、偶数にして返す
         int w = width % 2 == 0 ? width : width - 1;
         int h = height % 2 == 0 ? height : height - 1;
 
-        //マップの外周を壁にし、その内側を通路にする。
+        //マップの外周を壁にし、その内側を全て通路にする。
         string[,] maze = new string[w, h];
         for (int i = 0; i < w; i++)
             for (int j = 0; j < h; j++)
-            {                
-                maze[i, j] = i * j == 0 || i == w - 1 || j == h - 1 ? "W" : "F";  //"W"を壁に、"F"を床にする
-                if (i % 2 == 0 && j % 2 == 0) { _startPoint.Add((i, j)); }  //偶数番目のマスを壁生成開始地点候補に追加する
+            {
+                maze[i, j] = i * j == 0 || i == w - 1 || j == h - 1 ? "W" : "F";
+                //偶数番目のマスを壁生成開始地点候補に追加する
+                if (i % 2 == 0 && j % 2 == 0) { _startPoint.Add((i, j)); }
             }
+        ExtendWall(maze, _startPoint);
     }
 
     /// <summary>壁をランダムな方向に伸ばす</summary>
@@ -41,7 +44,7 @@ public class RandomMapController : MonoBehaviour
         //壁生成開始地点をセットする
         int x = startPoints[startIndex].Item1;
         int y = startPoints[startIndex].Item2;
-        //壁生成開始地点のリストから、削除する
+        //壁生成開始地点のリストから、候補だった座標を削除する
         startPoints.RemoveAt(startIndex);
 
         while(true)
@@ -53,10 +56,6 @@ public class RandomMapController : MonoBehaviour
             if (map[x, y + 1] == "F" && map[x, y + 2] == "F") direction.Add("DOWN");
             if (map[x - 1, y] == "F" && map[x - 2, y] == "F") direction.Add("LEFT");
             if (map[x + 1, y] == "F" && map[x + 2, y] == "F") direction.Add("RIGHT");
-            //壁を延長できる方向がなくなったら、ループを抜ける
-            if (direction.Count == 0) break;
-            //壁を延長する
-            map[x, y] = "W";
             //壁を伸ばす方向をランダムで決める
             int dirIndex = Random.Range(0, direction.Count);
             switch (direction[dirIndex])
@@ -78,6 +77,10 @@ public class RandomMapController : MonoBehaviour
                     WallInstallation(map, x++, y);
                     break;
             }
+            //壁を延長する
+            map[x, y] = "W";
+            //壁を延長できる方向がなくなったら、ループを抜ける
+            if (direction.Count == 0) break;
         }
     }
 
@@ -85,6 +88,14 @@ public class RandomMapController : MonoBehaviour
     void WallInstallation(string[,] map, int x, int y)
     {
         map[x, y] = "W";
-        if (x * y % 2 == 0) _startPoint.Remove((x, y));  // x. y が共に偶数だったら、壁生成開始地点候補から削除する
+        // x. y が共に偶数だったら、壁生成開始地点候補から削除する
+        if (x * y % 2 == 0) _startPoint.Remove((x, y));
+    }
+
+    /// <summary></summary>
+    /// <param name="str"></param>
+    void SetSpot(string[,] maze, string str)
+    {
+        
     }
 }
