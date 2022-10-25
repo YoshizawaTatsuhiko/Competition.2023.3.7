@@ -92,10 +92,29 @@ public class RandomMapController : MonoBehaviour
         if (x * y % 2 == 0) _startPoint.Remove((x, y));
     }
 
-    /// <summary></summary>
-    /// <param name="str"></param>
+    /// <summary>ランダムな行き止まりに、特定の文字を設置する</summary>
+    /// <param name="maze">マップの大きさ</param>
+    /// <param name="str">特定の文字</param>
     void SetSpot(string[,] maze, string str)
     {
-        
+        //System.Guid.NewGuid() : GameObject に割り振られているID
+        foreach (var point in _goalPosition.
+
+            OrderBy(_ => System.Guid.NewGuid()).Where(p => maze[p.Item1, p.Item2] == "F"))
+        {
+            //3方向が壁になっている場所を探す
+            int count = 0;
+            if (maze[point.Item1, point.Item2 - 1] == "W") count++;
+            if (maze[point.Item1, point.Item2 + 1] == "W") count++;
+            if (maze[point.Item1 - 1, point.Item2] == "W") count++;
+            if (maze[point.Item1 + 1, point.Item2] == "W") count++;
+
+            if(count == 3)
+            {
+                maze[point.Item1, point.Item2] = str;
+                Debug.Log($"{str} = Complete");
+                break;
+            }
+        }
     }
 }
