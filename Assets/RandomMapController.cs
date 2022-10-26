@@ -97,7 +97,7 @@ public class RandomMapController : MonoBehaviour
     /// <param name="str">“Á’è‚Ì•¶Žš</param>
     void SetSpot(string[,] maze, string str)
     {
-        //System.Guid.NewGuid() : GameObject ‚ÉŠ„‚èU‚ç‚ê‚Ä‚¢‚éID
+        //System.Guid.NewGuid() : GameObject ‚É GUID ‚ðŠ„‚èU‚é
         foreach (var point in _goalPosition.
 
             OrderBy(_ => System.Guid.NewGuid()).Where(p => maze[p.Item1, p.Item2] == "F"))
