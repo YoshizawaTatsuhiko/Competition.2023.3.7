@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+class MapGenerator : MonoBehaviour
 {
+    [SerializeField] int _width = 1;
+    [SerializeField] int _height = 1;
+    RandomMapController _generateMap;
+
     void Start()
     {
-        
-    }
-
-    void Update()
-    {
-        
+        _generateMap = FindObjectOfType<RandomMapController>();
+        _generateMap.GenerateMap(_width, _height);
     }
 }

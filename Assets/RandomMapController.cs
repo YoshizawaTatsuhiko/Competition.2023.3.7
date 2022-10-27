@@ -22,7 +22,7 @@ public class RandomMapController : MonoBehaviour
         int w = width % 2 == 0 ? width : width - 1;
         int h = height % 2 == 0 ? height : height - 1;
 
-        //マップの外周を壁にし、その内側を全て通路にする。
+        //マップの外周を壁にし、その内側を全て通路で埋める。
         string[,] maze = new string[w, h];
         for (int i = 0; i < w; i++)
             for (int j = 0; j < h; j++)
@@ -89,7 +89,7 @@ public class RandomMapController : MonoBehaviour
     {
         map[x, y] = "W";
         // x. y が共に偶数だったら、壁生成開始地点候補から削除する
-        if (x * y % 2 == 0) _startPoint.Remove((x, y));
+        if (x % 2 == 0 && y % 2 == 0) _startPoint.Remove((x, y));
     }
 
     /// <summary>ランダムな行き止まりに、特定の文字を設置する</summary>
@@ -97,10 +97,8 @@ public class RandomMapController : MonoBehaviour
     /// <param name="str">特定の文字</param>
     void SetSpot(string[,] maze, string str)
     {
-        //System.Guid.NewGuid() : GameObject に GUID を割り振る
         foreach (var point in _goalPosition.
-
-            OrderBy(_ => System.Guid.NewGuid()).Where(p => maze[p.Item1, p.Item2] == "F"))
+            OrderBy(_ => _goalPosition.Count).Where(p => maze[p.Item1, p.Item2] == "F"))
         {
             //3方向が壁になっている場所を探す
             int count = 0;
