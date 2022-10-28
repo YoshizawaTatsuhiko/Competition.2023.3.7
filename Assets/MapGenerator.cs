@@ -4,7 +4,9 @@ using UnityEngine;
 
 class MapGenerator : MonoBehaviour
 {
+    /// <summary>‰¡•</summary>
     [SerializeField] int _width = 1;
+    /// <summary>c•</summary>
     [SerializeField] int _height = 1;
     RandomMapController _generateMap;
 
