@@ -9,18 +9,17 @@ public class LoadScene : MonoBehaviour
 {
     [SerializeField] float _fadeTime = 1f;
     [SerializeField] Image _image = default;
-    SpriteRenderer _sprite = default;
 
     void Start()
     {
-        _sprite = GetComponent<SpriteRenderer>();
         _image.color = Color.black;
         _image.enabled = true;
-        _image.DOFade(1f, _fadeTime);
+        _image.DOFade(0f, _fadeTime).OnComplete(() => _image.enabled = false);
     }
 
     public void SceneToLoad(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        _image.enabled = true;
+        _image.DOFade(1f, _fadeTime).OnComplete(() => SceneManager.LoadScene(sceneName));
     }
 }
