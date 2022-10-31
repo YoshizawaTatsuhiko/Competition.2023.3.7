@@ -14,7 +14,7 @@ public class RandomMapController : MonoBehaviour
     /// <summary>マップを自動生成する</summary>
     /// <param name="width">横幅</param>
     /// <param name="height">縦幅</param>
-    public void GenerateMap(int width, int height)
+    public string GenerateMap(int width, int height)
     {
         //渡された値が 5未満だったら、エラーを返す
         if (width < 5 || height < 5) throw new System.ArgumentOutOfRangeException();
@@ -32,6 +32,9 @@ public class RandomMapController : MonoBehaviour
                 if (i % 2 == 0 && j % 2 == 0) { _startPoint.Add((i, j)); }
             }
         ExtendWall(maze, _startPoint);
+        SetSpot(maze, "S");
+        SetSpot(maze, "G");
+        return ArrayToString(maze);
     }
 
     /// <summary>壁をランダムな方向に伸ばす</summary>
@@ -114,5 +117,21 @@ public class RandomMapController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    /// <summary>迷路を文字列にして表示する</summary>
+    /// <param name="maze">迷路の全長</param>
+    /// <returns>文字列化した迷路</returns>
+    string ArrayToString(string[,] maze)
+    {
+        string str = "";
+
+        for(int i = 0; i < maze.Length; i++)
+        {
+            for (int j = 0; j < maze.Length; j++) str += maze[i, j];
+            if (i < maze.Length - 1) str += "\n";
+        }
+        Debug.Log(str);
+        return str;
     }
 }
