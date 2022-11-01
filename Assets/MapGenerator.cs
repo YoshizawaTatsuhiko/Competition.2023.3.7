@@ -8,11 +8,15 @@ class MapGenerator : MonoBehaviour
     [SerializeField] int _width = 1;
     /// <summary>c•</summary>
     [SerializeField] int _height = 1;
+    [SerializeField] GameObject[] _go = default;
     RandomMapController _generateMap;
 
     void Start()
     {
         _generateMap = FindObjectOfType<RandomMapController>();
-        _generateMap.GenerateMap(_width, _height);
+        if (_generateMap.GenerateMap(_width, _height) == "W") { Instantiate(_go[0]); }
+        if (_generateMap.GenerateMap(_width, _height) == "F") { Instantiate(_go[1]); }
+        if (_generateMap.GenerateMap(_width, _height) == "S") { Instantiate(_go[2]); }
+        if (_generateMap.GenerateMap(_width, _height) == "G") { Instantiate(_go[3]); }
     }
 }

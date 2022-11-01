@@ -6,7 +6,7 @@ using System.Linq;
 /// <summary>生成する度に変化するマップを生み出す</summary>
 public class RandomMapController : MonoBehaviour
 {
-    /// <summary>壁生成開始地点候補</summary>
+    /// <summary>壁生成(|| ゲーム)開始地点候補</summary>
     List<(int, int)> _startPoint = new List<(int, int)>();
     /// <summary>ゴール地点候補の座標を格納する</summary>
     List<(int, int)> _goalPosition = new List<(int, int)>();
@@ -31,8 +31,11 @@ public class RandomMapController : MonoBehaviour
                 //偶数番目のマスを壁生成開始地点候補に追加する
                 if (i % 2 == 0 && j % 2 == 0) { _startPoint.Add((i, j)); }
             }
+        //壁の生成と延長
         ExtendWall(maze, _startPoint);
+        //スタート地点の設置
         SetSpot(maze, "S");
+        //ゴール地点の設置
         SetSpot(maze, "G");
         return ArrayToString(maze);
     }

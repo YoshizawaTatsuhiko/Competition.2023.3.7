@@ -26,7 +26,7 @@ public class LoadScene : MonoBehaviour
     public void SceneToLoad(string sceneName)
     {
         //Panel‚ðŒ©‚¦‚È‚­‚µ‚Ä‚¨‚­
-        _image.CrossFadeAlpha(1, 0, false);
+        _image?.CrossFadeAlpha(1, 0, false);
         //Fade out Š®—¹ŒãAƒV[ƒ“‚ð‘JˆÚ‚·‚é
         _image.enabled = true;
         _image.DOFade(1f, _fadeTime).OnComplete(() => SceneManager.LoadScene(sceneName));
