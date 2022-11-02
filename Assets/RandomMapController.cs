@@ -6,7 +6,7 @@ using System.Linq;
 /// <summary>生成する度に変化するマップを生み出す</summary>
 public class RandomMapController : MonoBehaviour
 {
-    /// <summary>壁生成(|| ゲーム)開始地点候補</summary>
+    /// <summary>壁生成 || ゲーム 開始地点候補</summary>
     List<(int, int)> _startPoint = new List<(int, int)>();
     /// <summary>ゴール地点候補の座標を格納する</summary>
     List<(int, int)> _goalPosition = new List<(int, int)>();
@@ -18,9 +18,9 @@ public class RandomMapController : MonoBehaviour
     {
         //渡された値が 5未満だったら、エラーを返す
         if (width < 5 || height < 5) throw new System.ArgumentOutOfRangeException();
-        //渡された値が奇数なら、偶数にして返す
-        int w = width % 2 == 0 ? width : width - 1;
-        int h = height % 2 == 0 ? height : height - 1;
+        //渡された値が偶数なら、奇数にして返す
+        int w = width % 2 != 0 ? width : width - 1;
+        int h = height % 2 != 0 ? height : height - 1;
 
         //マップの外周を壁にし、その内側を全て通路で埋める。
         string[,] maze = new string[w, h];
@@ -67,20 +67,20 @@ public class RandomMapController : MonoBehaviour
             switch (direction[dirIndex])
             {
                 case "UP":
-                    WallInstallation(map, x, y--);
-                    WallInstallation(map, x, y--);
+                    WallExtender(map, x, --y);
+                    WallExtender(map, x, --y);
                     break;
                 case "DOWN":
-                    WallInstallation(map, x, y++);
-                    WallInstallation(map, x, y++);
+                    WallExtender(map, x, ++y);
+                    WallExtender(map, x, ++y);
                     break;
                 case "LEFT":
-                    WallInstallation(map, x--, y);
-                    WallInstallation(map, x--, y);
+                    WallExtender(map, --x, y);
+                    WallExtender(map, --x, y);
                     break;
                 case "RIGHT":
-                    WallInstallation(map, x++, y);
-                    WallInstallation(map, x++, y);
+                    WallExtender(map, ++x, y);
+                    WallExtender(map, ++x, y);
                     break;
             }
             //壁を延長する
@@ -91,7 +91,7 @@ public class RandomMapController : MonoBehaviour
     }
 
     /// <summary>壁を設置する</summary>
-    void WallInstallation(string[,] map, int x, int y)
+    void WallExtender(string[,] map, int x, int y)
     {
         map[x, y] = "W";
         // x. y が共に偶数だったら、壁生成開始地点候補から削除する
