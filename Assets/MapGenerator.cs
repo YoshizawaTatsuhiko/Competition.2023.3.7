@@ -8,7 +8,7 @@ class MapGenerator : MonoBehaviour
     [SerializeField] int _width = 1;
     /// <summary>c•</summary>
     [SerializeField] int _height = 1;
-    /// <summary>–À˜H‚ğŒ`ì‚éobject’B</summary>
+    /// <summary>–À˜H‚ğŒ`ì‚éobject</summary>
     [SerializeField] GameObject[] _go = default;
     RandomMapController _generateMap;
 
