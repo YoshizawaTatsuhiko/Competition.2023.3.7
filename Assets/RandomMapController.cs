@@ -12,8 +12,6 @@ public class RandomMapController : MonoBehaviour
     List<(int, int)> _goalPosition = new List<(int, int)>();
 
     /// <summary>マップを自動生成する</summary>
-    /// <param name="width">横幅</param>
-    /// <param name="height">縦幅</param>
     public string GenerateMap(int width, int height)
     {
         //渡された値が 5未満だったら、エラーを返す
@@ -99,7 +97,7 @@ public class RandomMapController : MonoBehaviour
     }
 
     /// <summary>ランダムな行き止まりに、特定の文字を設置する</summary>
-    /// <param name="maze">マップの大きさ</param>
+    /// /// <param name="maze">迷路の全長</param>
     /// <param name="str">特定の文字</param>
     void SetSpot(string[,] maze, string str)
     {
