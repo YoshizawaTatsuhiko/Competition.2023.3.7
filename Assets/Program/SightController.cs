@@ -10,19 +10,39 @@ public class SightController : MonoBehaviour
     private float _searchAngle = 1f;
     [SerializeField, Tooltip("索敵距離")]
     private float _range = 1f;
-    /// <summary>衝突したオブジェクトの情報</summary>
-    private RaycastHit _hit;
+    [SerializeField, Tooltip("")]
+    private bool _isGizmos = true;
+    /// <summary>Playerを認識中かどうか判別する</summary>
+    private bool _isDiscover = false;
+    /// <summary>Playerのいる方向</summary>
+    private Vector3 _direction;
 
     private void FixedUpdate()
     {
+        //Playerとゲームオブジェクトの距離や方向を計算する
         float distance = Vector3.Distance(_terget.position, transform.position);
-        Vector3 vec = _terget.position - transform.position;
-        float angle = Vector3.Angle(vec, transform.forward);
+        _direction = _terget.position - transform.position;
+        float angle = Vector3.Angle(_direction, transform.forward);
 
+        //Playerが視界の範囲内に入った時の処理
         if (angle <= _searchAngle && distance <= _range)
         {
             transform.forward = _terget.position;
-            Physics.Raycast(transform.position, vec, out _hit, _range, LayerMask.GetMask(""));
+            _isDiscover = Physics.Raycast(
+                transform.position, _direction, _range, LayerMask.GetMask("Player"));
+
+            if (_isDiscover)
+            {
+
+            }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        //_isGizmosがfalseの時、Gizmosを非表示にする
+        if (_isGizmos == false) return;
+
+        Gizmos.DrawRay(transform.position, _direction * _range);
     }
 }
