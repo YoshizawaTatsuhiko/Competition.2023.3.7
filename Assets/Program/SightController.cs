@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class SightController : MonoBehaviour
 {
@@ -28,10 +29,14 @@ public class SightController : MonoBehaviour
         if (angle <= _searchAngle && distance <= _range)
         {
             transform.forward = _terget.position;
-            _isDiscover = Physics.Raycast(
-                transform.position, _direction, _range, LayerMask.GetMask("Player"));
+            _isDiscover = Physics.Raycast(transform.position, 
+                                                  _direction, _range, LayerMask.GetMask("Player"));
 
             if (_isDiscover)
+            {
+
+            }
+            else
             {
 
             }
@@ -43,6 +48,9 @@ public class SightController : MonoBehaviour
         //_isGizmos‚ªfalse‚ÌŽžAGizmos‚ð”ñ•\Ž¦‚É‚·‚é
         if (_isGizmos == false) return;
 
+        //Player‚ðŒŸ’m‚·‚éRay
         Gizmos.DrawRay(transform.position, _direction * _range);
+        Handles.color = Color.red;
+        //Handles.DrawSolidArc(transform.position, Vector3.up,);
     }
 }
