@@ -18,7 +18,24 @@ public class SightController : MonoBehaviour
     /// <summary>Playerのいる方向</summary>
     private Vector3 _direction;
 
+#if UNITY_EDITOR
+    
+#endif
+
+
     private void FixedUpdate()
+    {
+        if (SearchTerget())
+        {
+            Debug.Log("お前を見ている");
+        }
+        else
+        {
+            Debug.Log("(暇だなぁ...)");
+        }
+    }
+
+    public bool SearchTerget()
     {
         //Playerとゲームオブジェクトの距離や方向を計算する
         float distance = Vector3.Distance(_terget.position, transform.position);
@@ -28,18 +45,16 @@ public class SightController : MonoBehaviour
         //Playerが視界の範囲内に入った時の処理
         if (angle <= _searchAngle && distance <= _range)
         {
-            transform.forward = _terget.position;
-            _isDiscover = Physics.Raycast(transform.position, 
-                                                  _direction, _range, LayerMask.GetMask("Player"));
+            transform.forward = _direction;
+            //_isDiscover = Physics.Raycast(transform.position,
+            //                                      _direction, _range, LayerMask.GetMask("Player"));
+            return true;
+        }
 
-            if (_isDiscover)
-            {
-
-            }
-            else
-            {
-
-            }
+        //Playerが視界の範囲外に居る時の処理
+        else
+        {
+            return false;
         }
     }
 
@@ -50,7 +65,13 @@ public class SightController : MonoBehaviour
 
         //Playerを検知するRay
         Gizmos.DrawRay(transform.position, _direction * _range);
-        Handles.color = Color.red;
-        //Handles.DrawSolidArc(transform.position, Vector3.up,);
+
+        //視界を表示する
+        Color color = new Color(1f, 0f, 0f, 0.2f);
+        Handles.color = color;
+        Handles.DrawSolidArc(transform.position, transform.forward, 
+            new Vector3(/*[X]*/ _searchAngle / 2f + transform.forward.x, /*[Y]*/ 0f,
+                        /*[Z]*/ _searchAngle / 2f + transform.forward.z).normalized, 
+            Mathf.PI * 2 * Mathf.Rad2Deg, _range);
     }
 }
