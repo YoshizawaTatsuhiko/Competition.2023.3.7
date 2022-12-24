@@ -11,17 +11,10 @@ public class SightController : MonoBehaviour
     private float _searchAngle = 1f;
     [SerializeField, Tooltip("索敵距離")]
     private float _range = 1f;
-    [SerializeField, Tooltip("")]
+    [SerializeField, Tooltip("Gizmosを表示するかどうか\ntrue -> 表示 | false -> 非表示")]
     private bool _isGizmos = true;
-    /// <summary>Playerを認識中かどうか判別する</summary>
-    private bool _isDiscover = false;
-    /// <summary>Playerのいる方向</summary>
+    /// <summary>標的のいる方向</summary>
     private Vector3 _direction;
-
-#if UNITY_EDITOR
-    
-#endif
-
 
     private void FixedUpdate()
     {
@@ -35,9 +28,11 @@ public class SightController : MonoBehaviour
         }
     }
 
+    /// <summary>Tergetが視界に入っているかどうか判定する</summary>
+    /// <returns>入っている -> true | 入っていない -> false;</returns>
     public bool SearchTerget()
     {
-        //Playerとゲームオブジェクトの距離や方向を計算する
+        //Tergetとゲームオブジェクトの距離や方向を計算する
         float distance = Vector3.Distance(_terget.position, transform.position);
         _direction = _terget.position - transform.position;
         float angle = Vector3.Angle(_direction, transform.forward);
@@ -46,8 +41,6 @@ public class SightController : MonoBehaviour
         if (angle <= _searchAngle && distance <= _range)
         {
             transform.forward = _direction;
-            //_isDiscover = Physics.Raycast(transform.position,
-            //                                      _direction, _range, LayerMask.GetMask("Player"));
             return true;
         }
 
@@ -68,10 +61,10 @@ public class SightController : MonoBehaviour
 
         //視界を表示する
         Color color = new Color(1f, 0f, 0f, 0.2f);
-        Handles.color = color;
-        Handles.DrawSolidArc(transform.position, transform.forward, 
-            new Vector3(/*[X]*/ _searchAngle / 2f + transform.forward.x, /*[Y]*/ 0f,
-                        /*[Z]*/ _searchAngle / 2f + transform.forward.z).normalized, 
-            Mathf.PI * 2 * Mathf.Rad2Deg, _range);
+        //Handles.color = color;
+        //Handles.DrawSolidArc(transform.position, transform.forward,
+        //    transform.forward * _searchAngle,
+        //    Mathf.PI * 2 * Mathf.Rad2Deg, _range);
+        MyGizmos.AddGizmos.DrawWireCone(transform.position, transform.forward * _range, Vector3.up, _searchAngle);
     }
 }
