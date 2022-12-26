@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using MyGizmos;  //é©çÏñºëOãÛä‘ÅFGizmosÇí«â¡Ç∑ÇÈ
 
 public class SightController : MonoBehaviour
 {
@@ -65,6 +66,6 @@ public class SightController : MonoBehaviour
         //Handles.DrawSolidArc(transform.position, transform.forward,
         //    transform.forward * _searchAngle,
         //    Mathf.PI * 2 * Mathf.Rad2Deg, _range);
-        MyGizmos.AddGizmos.DrawWireCone(transform.position, transform.forward * _range, Vector3.up, _searchAngle);
+        AddGizmos.DrawWireCone(transform.position, transform.forward * _range, _searchAngle, transform.rotat);
     }
 }
