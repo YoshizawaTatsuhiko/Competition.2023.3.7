@@ -12,44 +12,78 @@ public class SightController : MonoBehaviour
     private float _searchAngle = 1f;
     [SerializeField, Tooltip("索敵距離")]
     private float _range = 1f;
-    //[SerializeField, Tooltip("Gizmosを表示するかどうか\ntrue -> 表示 | false -> 非表示")]
-    //private bool _isGizmos = true;
-    /// <summary>標的のいる方向</summary>
+    /// <summary>対象との距離</summary>
     private float _distance;
+    /// <summary>対象を発見したかどうかを判定する</summary>
+    private bool _isDiscover = false;
+    /// <summary>対象が視認できているかどうかを判定する</summary>
+    private bool _isLook = false;
+    /// <summary>対象を見失った時に向き直る方向</summary>
+    private Vector3 _front = Vector3.zero;
+    /// <summary></summary>
+    private float _turnTime = 0.5f;
 
     private void Start()
     {
-        if (!_terget) Debug.LogWarning("ターゲットがassignされていません。");
+        if (!_terget) Debug.LogWarning("対象がassignされていません。");
     }
 
     private void FixedUpdate()
     {
         _distance = Vector3.Distance(_terget.transform.position, transform.position);
 
-        if (SearchTerget(_searchAngle) && _distance <= _range)
+        if(_isDiscover)
         {
-            Debug.Log("通過");
-            if (LookAtTerget())
+            _front = transform.forward;
+            if (Physics.Raycast(transform.position, transform.forward, _terget.gameObject.layer))
             {
+                transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _terget.position, _turnTime));
                 Debug.Log("お前を見ている");
+            }
+            else
+            {
+                _isDiscover = false;
+                _isLook = true;
             }
         }
         else
         {
+            float discoverDot = Mathf.Abs(Vector3.Dot(
+                transform.forward, (_terget.position - transform.position).normalized));
+
+            if (discoverDot >= _searchAngle)
+            {
+                _isDiscover = true;
+            }
+            if (_isLook)
+            {
+                float lookDot = Vector3.Dot(transform.forward, _front);
+
+                if (lookDot <= 0.95f)
+                {
+                    transform.LookAt(
+                        Vector3.Lerp(transform.forward + transform.position, _front + transform.position, _turnTime));
+                }
+                else
+                {
+                    _isLook = false;
+                }
+            }
             Debug.Log("(暇だなぁ...)");
         }
     }
 
+    /*
     /// <summary>Tergetが視界に入っているかどうか判定する</summary>
     /// <param name="angle">索敵範囲</param>
     /// <returns>入っている -> true | 入っていない -> false;</returns>
     private bool SearchTerget(float angle)
     {
         //Tergetとゲームオブジェクトの内積を計算する
-        float dot = Vector3.Dot(transform.forward, (_terget.transform.position - transform.position).normalized);
+        float dot = Vector3.Dot(transform.forward, (_terget.position - transform.position).normalized);
 
         //Playerが視界の範囲内に入った時の処理
-        if(dot > angle)
+        if(Mathf.Abs(dot) >= angle)
         {
             return true;
         }
@@ -62,19 +96,16 @@ public class SightController : MonoBehaviour
     }
 
     /// <summary>ターゲットとゲームオブジェクトの間に障害物があるかどうかを判定する</summary>
+    /// <param name="terget">凝視する対象</param>
     /// <returns>障害物ナシ -> true | 障害物アリ -> false</returns>
-    private bool LookAtTerget()
+    private void LookAtTerget(Transform terget)
     {
-        Debug.DrawRay(transform.position, transform.forward * _range);
+        //ターゲットの方向を向く
+        transform.LookAt(Vector3.Lerp(transform.forward + transform.position, terget.position, 1f));
 
-        if (Physics.Raycast(transform.position, transform.forward, _range, _terget.gameObject.layer))
-        {
-            return true;
-        }
-
-        else
-        {
-            return false;
-        }
+        //対象とゲームオブジェクトの間に障害物があるかどうかを確認するためのRayを飛ばす
+        Physics.Raycast(transform.position, transform.forward, terget.gameObject.layer);
+        Debug.DrawRay(transform.position, transform.forward);
     }
+    */
 }
