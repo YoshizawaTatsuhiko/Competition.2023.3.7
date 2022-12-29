@@ -17,10 +17,10 @@ public class SightController : MonoBehaviour
     /// <summary>対象を発見したかどうかを判定する</summary>
     private bool _isDiscover = false;
     /// <summary>対象が視認できているかどうかを判定する</summary>
-    private bool _isLook = false;
+    private bool _isTergetLost = false;
     /// <summary>対象を見失った時に向き直る方向</summary>
     private Vector3 _front = Vector3.zero;
-    /// <summary></summary>
+    /// <summary>振り向くまでの時間</summary>
     private float _turnTime = 0.5f;
 
     private void Start()
@@ -30,11 +30,14 @@ public class SightController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _distance = Vector3.Distance(_terget.transform.position, transform.position);
+        //_distance = Vector3.Distance(_terget.transform.position, transform.position);
 
+        //対象を発見した時
         if(_isDiscover)
         {
             _front = transform.forward;
+
+            //Rayを飛ばして、対象との間に障害物があるかどうか調べる
             if (Physics.Raycast(transform.position, transform.forward, _terget.gameObject.layer))
             {
                 transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _terget.position, _turnTime));
@@ -43,11 +46,14 @@ public class SightController : MonoBehaviour
             else
             {
                 _isDiscover = false;
-                _isLook = true;
+                _isTergetLost = true;
             }
         }
+
+        //対象を発見できていない時
         else
         {
+            //対象を発見するときに使う内積
             float discoverDot = Mathf.Abs(Vector3.Dot(
                 transform.forward, (_terget.position - transform.position).normalized));
 
@@ -55,8 +61,9 @@ public class SightController : MonoBehaviour
             {
                 _isDiscover = true;
             }
-            if (_isLook)
+            if (_isTergetLost)
             {
+                //対象を見失った時、発見する前の方向を向くときに使う内積
                 float lookDot = Vector3.Dot(transform.forward, _front);
 
                 if (lookDot <= 0.95f)
@@ -64,9 +71,9 @@ public class SightController : MonoBehaviour
                     transform.LookAt(
                         Vector3.Lerp(transform.forward + transform.position, _front + transform.position, _turnTime));
                 }
-                else
+                else  //ある程度発見前の方向を向いたら、振り向くのをやめる
                 {
-                    _isLook = false;
+                    _isTergetLost = false;
                 }
             }
             Debug.Log("(暇だなぁ...)");
