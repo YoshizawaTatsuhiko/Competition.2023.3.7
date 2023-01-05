@@ -16,6 +16,6 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        
+        _rb.velocity = transform.forward;
     }
 }
