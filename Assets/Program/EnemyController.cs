@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField]
+    private float _moveSpeed = 1f;
     /// <summary>Rigidbody2D</summary>
     private Rigidbody2D _rb = null;
 
@@ -16,6 +18,6 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        _rb.velocity = transform.forward;
+        _rb.velocity = transform.forward * _moveSpeed;
     }
 }
