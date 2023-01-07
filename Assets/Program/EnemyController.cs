@@ -2,18 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField]
     private float _moveSpeed = 1f;
-    /// <summary>Rigidbody2D</summary>
-    private Rigidbody2D _rb = null;
+    /// <summary>Rigidbody</summary>
+    private Rigidbody _rb = null;
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody>();
+        _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void Update()
