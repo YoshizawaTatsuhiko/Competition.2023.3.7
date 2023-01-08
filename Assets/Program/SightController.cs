@@ -38,8 +38,9 @@ public class SightController : MonoBehaviour
             _front = transform.forward;
 
             //Rayを飛ばして、対象との間に障害物があるかどうか調べる
-            if (Physics.Raycast(transform.position, transform.forward, _terget.gameObject.layer))
+            if (Physics.Linecast(transform.position, transform.forward * _range, _terget.gameObject.layer))
             {
+                Debug.DrawLine(transform.position, transform.forward * _range);
                 transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _terget.position, _turnTime));
                 Debug.Log("お前を見ている");
             }
@@ -47,6 +48,7 @@ public class SightController : MonoBehaviour
             {
                 _isDiscover = false;
                 _isTergetLost = true;
+                Debug.Log("Switch");
             }
         }
 
@@ -60,10 +62,11 @@ public class SightController : MonoBehaviour
             if (discoverDot >= _searchAngle)
             {
                 _isDiscover = true;
+                Debug.Log("Discover!");
             }
             if (_isTergetLost)
             {
-                //対象を見失った時、発見する前の方向を向くときに使う内積
+                //対象を見失った時、発見する以前の方向を向くときに使う内積
                 float lookDot = Vector3.Dot(transform.forward, _front);
 
                 if (lookDot <= 0.95f)
@@ -76,7 +79,7 @@ public class SightController : MonoBehaviour
                     _isTergetLost = false;
                 }
             }
-            Debug.Log("(暇だなぁ...)");
+            //Debug.Log("(暇だなぁ...)");
         }
     }
 
