@@ -16,7 +16,7 @@ public class SightController : MonoBehaviour
     private float _distance;
     /// <summary>‘ÎÛ‚ğ”­Œ©‚µ‚½‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é</summary>
     private bool _isDiscover = false;
-    /// <summary>‘ÎÛ‚ª‹”F‚Å‚«‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é</summary>
+    /// <summary>‘ÎÛŒ©¸‚Á‚½‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é</summary>
     private bool _isTergetLost = false;
     /// <summary>‘ÎÛ‚ğŒ©¸‚Á‚½‚ÉŒü‚«’¼‚é•ûŒü</summary>
     private Vector3 _front = Vector3.zero;
@@ -38,11 +38,11 @@ public class SightController : MonoBehaviour
             _front = transform.forward;
 
             //Ray‚ğ”ò‚Î‚µ‚ÄA‘ÎÛ‚Æ‚ÌŠÔ‚ÉáŠQ•¨‚ª‚ ‚é‚©‚Ç‚¤‚©’²‚×‚é
-            if (Physics.Linecast(transform.position, transform.forward * _range, _terget.gameObject.layer))
+            if (Physics.Raycast(transform.position, transform.forward * _range, _terget.gameObject.layer))
             {
-                Debug.DrawLine(transform.position, transform.forward * _range);
+                Debug.DrawRay(transform.position, transform.forward * _range);
                 transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _terget.position, _turnTime));
-                Debug.Log("‚¨‘O‚ğŒ©‚Ä‚¢‚é");
+                Debug.Log("Look...");
             }
             else
             {
