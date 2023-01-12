@@ -25,11 +25,11 @@ public class SightController : MonoBehaviour
         {
             if (TargetLook(_target, _searchRange))
             {
-
+                Debug.Log("LOOK");
             }
             else
             {
-
+                Debug.Log("LOST");
             }
         }
     }
@@ -67,7 +67,7 @@ public class SightController : MonoBehaviour
     private bool TargetLook(Transform target, float range)
     {
         // Playerを凝視する。
-        //_turnAroundDir = transform.forward;
+        _turnAroundDir = transform.forward;
         transform.LookAt(target);
 
         // Rayを飛ばして自身とターゲットの間に障害物があるかどうか確認する。
@@ -78,8 +78,8 @@ public class SightController : MonoBehaviour
         if (hit.collider.tag != "Player")
         {
             transform.LookAt(null);
+            transform.forward = _turnAroundDir;
             return false;
-            //transform.forward = _turnAroundDir;
         }
         else
         {
