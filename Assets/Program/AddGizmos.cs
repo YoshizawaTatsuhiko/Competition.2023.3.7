@@ -27,16 +27,18 @@ namespace MyGizmos
 
             //‘‰Á—Ê‚ğ‹‚ß‚é
             int addition = Mathf.RoundToInt(angle / segments);
-            
 
-            for (int i = 0; i <= angle; i += addition)  //‰~‚ğ•`‚­
-            {
-                float cos = radius * Mathf.Cos(i * Mathf.Deg2Rad);
-                Vector3 to = new Vector3(cos, radius * Mathf.Sin(i * Mathf.Deg2Rad), 0f);
-                Gizmos.DrawLine(from, to);
-                Gizmos.DrawLine(coneTip, to);
-                from = to;
-            }
+            Vector3 dest = coneTip + radius * direction.normalized;
+            Gizmos.DrawLine(coneTip, dest);
+
+            //for (int i = 0; i <= angle; i += addition)  //‰~‚ğ•`‚­
+            //{
+            //    float cos = radius * Mathf.Cos(i * Mathf.Deg2Rad);
+            //    Vector3 to = new Vector3(cos, radius * Mathf.Sin(i * Mathf.Deg2Rad), 0f);
+            //    Gizmos.DrawLine(from, to);
+            //    Gizmos.DrawLine(coneTip, to);
+            //    from = to;
+            //}
 
             //Gizmos‚Ìs—ñ‚ğŒ³‚É–ß‚·
             Gizmos.matrix = mat;
