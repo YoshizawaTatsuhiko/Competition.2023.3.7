@@ -7,7 +7,7 @@ public class SightController : MonoBehaviour
 {
     [SerializeField]
     private Transform _target = null;
-    [SerializeField, Range(0f, 1f), Tooltip("1のとき：オブジェクトの真正面、0のとき:オブジェクトの真右(真左)")]
+    [SerializeField, Range(0f, 1f), Tooltip("0 -> 1 になるほど、視界が狭くなる")]
     private float _searchAngle = 1f;
     [SerializeField]
     private float _searchRange = Mathf.Infinity;
@@ -25,6 +25,7 @@ public class SightController : MonoBehaviour
         {
             if (TargetLook(_target, _searchRange))
             {
+                Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.red);
                 Debug.Log("LOOK");
             }
             else
@@ -60,10 +61,10 @@ public class SightController : MonoBehaviour
         }
     }
 
-    /// <summary></summary>
+    /// <summary>ターゲットとの間に障害物があるかどうか調べる</summary>
     /// <param name="target"></param>
     /// <param name="range"></param>
-    /// <returns></returns>
+    /// <returns>true -> 障害物ナシ | false -> 障害物アリ</returns>
     private bool TargetLook(Transform target, float range)
     {
         // Playerを凝視する。
@@ -72,18 +73,22 @@ public class SightController : MonoBehaviour
 
         // Rayを飛ばして自身とターゲットの間に障害物があるかどうか確認する。
         Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, range);
-        Debug.DrawRay(transform.position, transform.forward * range, Color.red);
 
         // HitしたColliderのTagがPlayer以外だったら、凝視をやめる。
-        if (hit.collider.tag != "Player")
+        if (hit.collider.tag == "Player")
+        {
+            return true;
+        }
+        else
         {
             transform.LookAt(null);
             transform.forward = _turnAroundDir;
             return false;
         }
-        else
-        {
-            return true;
-        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        AddGizmos.DrawWireCone(transform.position, transform.forward, _searchRange, _searchAngle);
     }
 }

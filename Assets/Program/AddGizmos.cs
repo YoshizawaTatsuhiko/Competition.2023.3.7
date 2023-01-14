@@ -2,46 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//参考資料
-//https://github.com/code-beans/GizmoExtensions/blob/master/src/GizmosExtensions.cs
+// 参考資料
+// https://github.com/code-beans/GizmoExtensions/blob/master/src/GizmosExtensions.cs
 
 namespace MyGizmos
 {
     /// <summary>新しいGizmosを追加する</summary>
     public static class AddGizmos
     {
-        public static void DrawWireCone(Vector3 coneTip,
-            Vector3 direction, float radius, Quaternion rotation, float segments = 20f)
+        public static void DrawWireCone(Vector3 coneTip, Vector3 direction, float height, float circleRadius, float segments = 20f)
         {
-            //Gizmosの行列を保存しておく
-            Matrix4x4 mat = Gizmos.matrix;
-            float angle = Mathf.PI * 2 * Mathf.Rad2Deg;
-            //if (rotation == default) rotation = Quaternion.identity;
-
-            //Gizmosの行列を変換する
-            Gizmos.matrix = Matrix4x4.TRS(direction, rotation, Vector3.one);
-
-            //図形を描き始める地点
-            Vector3 from = direction * radius;
-            //Gizmos.DrawLine(coneTip, from);
-
-            //増加量を求める
-            int addition = Mathf.RoundToInt(angle / segments);
-
-            Vector3 dest = coneTip + radius * direction.normalized;
+            Vector3 dest = coneTip + direction.normalized * height;
             Gizmos.DrawLine(coneTip, dest);
 
-            //for (int i = 0; i <= angle; i += addition)  //円を描く
-            //{
-            //    float cos = radius * Mathf.Cos(i * Mathf.Deg2Rad);
-            //    Vector3 to = new Vector3(cos, radius * Mathf.Sin(i * Mathf.Deg2Rad), 0f);
-            //    Gizmos.DrawLine(from, to);
-            //    Gizmos.DrawLine(coneTip, to);
-            //    from = to;
-            //}
+            //円錐の円を描き始める地点
+            Vector3 from = dest;
+            from.y = circleRadius;
+            Gizmos.DrawLine(dest, from);
 
-            //Gizmosの行列を元に戻す
-            Gizmos.matrix = mat;
+            float degree = Mathf.PI * 2 * Mathf.Rad2Deg;
+
+            //増加量を求める
+            int addition = Mathf.RoundToInt(degree / segments);
+        }
+
+        public static void DrawCircle()
+        {
+
         }
     }
 }
