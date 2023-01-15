@@ -11,18 +11,18 @@ class MapGenerator : MonoBehaviour
     [SerializeField, Tooltip("ñ¿òHÇå`ê¨Ç∑ÇÈobject")]
     private GameObject[] _go = null;
     /// <summary></summary>
-    MazeMakeController _generateMap;
+    private MazeCreaterExtend _maze = null;
 
     private void Start()
     {
-        _generateMap = FindObjectOfType<MazeMakeController>();
+        _maze = FindObjectOfType<MazeCreaterExtend>();
     }
 
     private void FixedUpdate()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            
+            _maze.GenerateMaze(_width, _height);
         }
     }
 }
