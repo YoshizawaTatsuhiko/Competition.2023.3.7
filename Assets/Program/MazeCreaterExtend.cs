@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>生成する度に構造が変化するマップを生成する</summary>
 public class MazeCreaterExtend : MonoBehaviour
 {
-    /// <summary>拡張中の壁の情報を入れる</summary>
+    /// <summary>拡張中の壁の情報を格納する</summary>
     Stack<(int, int)> _currentWall = new Stack<(int, int)>();
     /// <summary>壁生成開始地点</summary>
     List<(int, int)> _startPoint = new List<(int, int)>();
@@ -56,16 +56,14 @@ public class MazeCreaterExtend : MonoBehaviour
         int y = startPoint[index].Item2;
         startPoint.RemoveAt(index);
 
-        while (true)
+        while (startPoint.Count > 0)
         {
             List<Direction> dirs = new List<Direction>();
 
-            if (maze[x, y - 1] == "F" && maze[x, y - 2] == "F") dirs.Add(Direction.Up);
-            if (maze[x, y + 1] == "F" && maze[x, y + 2] == "F") dirs.Add(Direction.Down);
-            if (maze[x - 1, y] == "F" && maze[x - 2, y] == "F") dirs.Add(Direction.Left);
-            if (maze[x + 1, y] == "F" && maze[x + 2, y] == "F") dirs.Add(Direction.Right);
-            // どの方向にも延長できなかったら、ループを抜ける。
-            if (dirs.Count == 0) break;
+            if (maze[x, y - 1] == "F" && !IsCurrentWall(x, y - 2)) dirs.Add(Direction.Up);
+            if (maze[x, y + 1] == "F" && !IsCurrentWall(x, y + 2)) dirs.Add(Direction.Down);
+            if (maze[x - 1, y] == "F" && !IsCurrentWall(x - 2, y)) dirs.Add(Direction.Left);
+            if (maze[x + 1, y] == "F" && !IsCurrentWall(x + 2, y)) dirs.Add(Direction.Right);
             // 壁を設置する
             SetWall(maze, x, y);
             int dirsIndex = Random.Range(0, dirs.Count);
@@ -89,6 +87,12 @@ public class MazeCreaterExtend : MonoBehaviour
                     break;
             }
         }
+
+        if (startPoint.Count > 0)
+        {
+            _currentWall.Clear();
+            ExtendWall(maze, startPoint);
+        }
     }
 
     /// <summary>壁を設置する</summary>
@@ -99,10 +103,11 @@ public class MazeCreaterExtend : MonoBehaviour
         if (x % 2 == 0 && y % 2 == 0)
         {
             _currentWall.Push((x, y));
-            //_startPoint.Add((x, y));
         }
     }
 
+    /// <summary>拡張中の壁かどうか判定する</summary>
+    /// <returns>true -> 拡張中 | false -> 拡張済</returns>
     private bool IsCurrentWall(int x, int y)
     {
         return _currentWall.Contains((x, y));
