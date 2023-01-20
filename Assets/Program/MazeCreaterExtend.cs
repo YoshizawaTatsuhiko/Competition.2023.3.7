@@ -104,7 +104,7 @@ public class MazeCreaterExtend : MonoBehaviour
     private void SetWall(string[,] maze, int x, int y)
     {
         maze[x, y] = "W";
-        // x, yが共に偶数だったら、。
+        // x, yが共に偶数だったら、スタックに格納する。
         if (x % 2 == 0 && y % 2 == 0)
         {
             _currentWall.Push((x, y));
