@@ -55,8 +55,9 @@ public class MazeCreaterExtend : MonoBehaviour
         int x = startPoint[index].Item1;
         int y = startPoint[index].Item2;
         startPoint.RemoveAt(index);
+        bool isFloor = true;
 
-        while (startPoint.Count > 0)
+        while (isFloor)
         {
             List<Direction> dirs = new List<Direction>();
 
@@ -72,18 +73,22 @@ public class MazeCreaterExtend : MonoBehaviour
                 case Direction.Up:
                     SetWall(maze, x, --y);
                     SetWall(maze, x, --y);
+                    isFloor = maze[x, y] == "F";
                     break;
                 case Direction.Down:
                     SetWall(maze, x, ++y);
                     SetWall(maze, x, ++y);
+                    isFloor = maze[x, y] == "F";
                     break;
                 case Direction.Left:
                     SetWall(maze, --x, y);
                     SetWall(maze, --x, y);
+                    isFloor = maze[x, y] == "F";
                     break;
                 case Direction.Right:
                     SetWall(maze, ++x, y);
                     SetWall(maze, ++x, y);
+                    isFloor = maze[x, y] == "F";
                     break;
             }
         }
@@ -99,7 +104,7 @@ public class MazeCreaterExtend : MonoBehaviour
     private void SetWall(string[,] maze, int x, int y)
     {
         maze[x, y] = "W";
-        // x, yが共に偶数だったら、壁生成開始地点のリストに追加する。
+        // x, yが共に偶数だったら、。
         if (x % 2 == 0 && y % 2 == 0)
         {
             _currentWall.Push((x, y));
