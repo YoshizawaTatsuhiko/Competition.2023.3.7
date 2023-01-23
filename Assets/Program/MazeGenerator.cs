@@ -25,12 +25,17 @@ class MazeGenerator : MonoBehaviour
         _bluePrint = new string[mazeInfo[0].Length, mazeInfo.Length - 1];
         To2DArray(mazeInfo, _bluePrint);
 
+        GameObject wallParent = new GameObject("Wall Parent");
+        GameObject flooeParent = new GameObject("Floor Parent");
+
         for (int i = 0; i < _bluePrint.GetLength(0); i++)
         {
             for (int j = 0; j < _bluePrint.GetLength(1); j++)
             {
-                if (_bluePrint[i, j] == "W") Instantiate(_go[0], new Vector3(i - _size / 2, 0, j - _size / 2), Quaternion.identity);
-                if (_bluePrint[i, j] == "F") Instantiate(_go[1], new Vector3(i - _size / 2, -0.5f, j - _size / 2), Quaternion.identity);
+                if (_bluePrint[i, j] == "W") Instantiate(_go[0], 
+                    new Vector3(i - _size / 2, 0, j - _size / 2), Quaternion.identity, wallParent.transform);
+                if (_bluePrint[i, j] == "F") Instantiate(_go[1], 
+                    new Vector3(i - _size / 2, -0.5f, j - _size / 2), Quaternion.identity, flooeParent.transform);
             }
         }
     }
