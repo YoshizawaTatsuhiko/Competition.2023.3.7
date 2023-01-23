@@ -16,10 +16,6 @@ class MazeGenerator : MonoBehaviour
     private MazeCreaterExtend _maze = null;
     private string[,] _bluePrint;
 
-    [SerializeField]
-    private float _clickInterval = 2f;
-    private float _timer = 0f;
-
     private void Start()
     {
         _width = _size;
@@ -33,40 +29,8 @@ class MazeGenerator : MonoBehaviour
         {
             for (int j = 0; j < _bluePrint.GetLength(1); j++)
             {
-                if (_bluePrint[i, j] == "W") Instantiate(_go[0], new Vector3(i, 0, j), Quaternion.identity);
-                if (_bluePrint[i, j] == "F") Instantiate(_go[1], new Vector3(i, 0, j), Quaternion.identity);
-            }
-        }
-    }
-
-    private bool _frag = true;
-
-    private void FixedUpdate()
-    {
-        if (Input.GetMouseButtonDown(1) && _frag)
-        {
-            //string[] mazeInfo = _maze.GenerateMaze(_width, _height).Split("\n");
-            //_bluePrint = new string[mazeInfo[0].Length, mazeInfo.Length];
-            //To2DArray(mazeInfo, _bluePrint);
-
-            //for (int i = 0; i < _height; i++)
-            //{
-            //    for(int j = 0; j < _width; j++)
-            //    {
-            //        if (_bluePrint[i, j] == "W") Instantiate(_go[0], new Vector3(i, 0, j), Quaternion.identity);
-            //        if (_bluePrint[i, j] == "F") Instantiate(_go[1], new Vector3(i, 0, j), Quaternion.identity);
-            //    }
-            //}
-            _frag = false;
-        }
-        else
-        {
-            _timer += Time.fixedDeltaTime;
-
-            if (_timer > _clickInterval)
-            {
-                _frag = true;
-                _timer = 0f;
+                if (_bluePrint[i, j] == "W") Instantiate(_go[0], new Vector3(i - _size / 2, 0, j - _size / 2), Quaternion.identity);
+                if (_bluePrint[i, j] == "F") Instantiate(_go[1], new Vector3(i - _size / 2, -0.5f, j - _size / 2), Quaternion.identity);
             }
         }
     }

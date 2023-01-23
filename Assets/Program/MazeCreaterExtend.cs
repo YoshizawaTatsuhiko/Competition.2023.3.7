@@ -59,37 +59,50 @@ public class MazeCreaterExtend : MonoBehaviour
 
         while (isFloor)
         {
-            List<Direction> dirs = new List<Direction>();
+            // 拡張できる方向を格納するリスト
+            List<string> dirs = new List<string>();
 
-            if (maze[x, y - 1] == "F" && !IsCurrentWall(x, y - 2)) dirs.Add(Direction.Up);
-            if (maze[x, y + 1] == "F" && !IsCurrentWall(x, y + 2)) dirs.Add(Direction.Down);
-            if (maze[x - 1, y] == "F" && !IsCurrentWall(x - 2, y)) dirs.Add(Direction.Left);
-            if (maze[x + 1, y] == "F" && !IsCurrentWall(x + 2, y)) dirs.Add(Direction.Right);
+            if (maze[x, y - 1] == "F" && !IsCurrentWall(x, y - 2)) dirs.Add("Up");
+            if (maze[x, y + 1] == "F" && !IsCurrentWall(x, y + 2)) dirs.Add("Down");
+            if (maze[x - 1, y] == "F" && !IsCurrentWall(x - 2, y)) dirs.Add("Left");
+            if (maze[x + 1, y] == "F" && !IsCurrentWall(x + 2, y)) dirs.Add("Right");
+            // 拡張する方向が見つからなかったら、ループを抜ける
+            if (dirs.Count == 0) break;
             // 壁を設置する
-            SetWall(maze, x, y);
+            SetWall(maze, x, y, startPoint);
             int dirsIndex = Random.Range(0, dirs.Count);
-            switch (dirs[dirsIndex])
+            try
             {
-                case Direction.Up:
-                    SetWall(maze, x, --y);
-                    SetWall(maze, x, --y);
-                    isFloor = maze[x, y] == "F";
-                    break;
-                case Direction.Down:
-                    SetWall(maze, x, ++y);
-                    SetWall(maze, x, ++y);
-                    isFloor = maze[x, y] == "F";
-                    break;
-                case Direction.Left:
-                    SetWall(maze, --x, y);
-                    SetWall(maze, --x, y);
-                    isFloor = maze[x, y] == "F";
-                    break;
-                case Direction.Right:
-                    SetWall(maze, ++x, y);
-                    SetWall(maze, ++x, y);
-                    isFloor = maze[x, y] == "F";
-                    break;
+                switch (dirs[dirsIndex])
+                {
+                    case "Up":
+                        isFloor = maze[x, y - 2] == "F";
+                        SetWall(maze, x, --y, startPoint);
+                        SetWall(maze, x, --y, startPoint);
+                        break;
+                    case "Down":
+                        isFloor = maze[x, y + 2] == "F";
+                        SetWall(maze, x, ++y, startPoint);
+                        SetWall(maze, x, ++y, startPoint);
+                        break;
+                    case "Left":
+                        isFloor = maze[x - 2, y] == "F";
+                        SetWall(maze, --x, y, startPoint);
+                        SetWall(maze, --x, y, startPoint);
+                        break;
+                    case "Right":
+                        isFloor = maze[x + 2, y] == "F";
+                        SetWall(maze, ++x, y, startPoint);
+                        SetWall(maze, ++x, y, startPoint);
+                        break;
+                    default:
+                        Debug.Log("拡張する方向が見つかりませんでした。");
+                        break;
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log(e.ToString());
             }
         }
 
@@ -101,12 +114,13 @@ public class MazeCreaterExtend : MonoBehaviour
     }
 
     /// <summary>壁を設置する</summary>
-    private void SetWall(string[,] maze, int x, int y)
+    private void SetWall(string[,] maze, int x, int y, List<(int, int)> list)
     {
         maze[x, y] = "W";
         // x, yが共に偶数だったら、スタックに格納する。
         if (x % 2 == 0 && y % 2 == 0)
         {
+            list.Remove((x, y));
             _currentWall.Push((x, y));
         }
     }
@@ -137,12 +151,11 @@ public class MazeCreaterExtend : MonoBehaviour
         return str;
     }
 
-    private enum Direction
-    {
-        Up,
-        Down,
-        Left,
-        Right,
-    }
-
+    //private enum Direction
+    //{
+    //    Up,
+    //    Down,
+    //    Left,
+    //    Right,
+    //}
 }
