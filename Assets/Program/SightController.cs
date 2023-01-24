@@ -1,29 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyGizmos;  //自作名前空間：ギズモを追加する
 
 public class SightController : MonoBehaviour
 {
     [SerializeField]
     private Transform _target = null;
-    [SerializeField, Range(0f, 1f), Tooltip("0 -> 1 になるほど、視界が狭くなる")]
-    private float _searchAngle = 1f;
+    [SerializeField, Range(0f, 180f)]
+    private float _searchDegree = 30f;
     [SerializeField]
-    private float _searchRange = Mathf.Infinity;
-    /// <summary>ターゲットを見失った時に向き直る方向</summary>
+    private float _searchRange = 15f;
+    /// <summary>ターゲットを見失った時に見る方向</summary>
     private Vector3 _turnAroundDir = Vector3.zero;
 
     private void Start()
     {
-        if (!_target) Debug.LogWarning("対象がassignされていません。");
+        if (!_target) Debug.LogWarning("ターゲットがassignされていません。");
     }
 
     private void FixedUpdate()
     {
-        if (TargetSearch(_target, _searchAngle, _searchRange))
+        if (SearchTarget(_target, _searchDegree, _searchRange))
         {
-            if (TargetLook(_target, _searchRange))
+            if (LookTarget(_target, _searchRange))
             {
                 Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.red);
                 Debug.Log("LOOK");
@@ -35,47 +34,37 @@ public class SightController : MonoBehaviour
         }
     }
 
-    /// <summary>索敵する</summary>
-    /// <param name="target">索敵対象</param>
-    /// <param name="angle">索敵範囲</param>
-    /// <param name="range">索敵距離</param>
-    /// <returns>true -> 発見した | false -> 発見していない</returns>
-    private bool TargetSearch(Transform target, float angle, float range)
+    /// <summary>ターゲットが視界内に入っているか判定する</summary>
+    /// <param name="target">判定するターゲット</param>
+    /// <param name="degree">視野角(度数法)</param>
+    /// <param name="range">索敵範囲</param>
+    /// <returns>true -> 発見 | false -> 未発見 or 見失った</returns>
+    private bool SearchTarget(Transform target, float degree, float range)
     {
-        // ターゲットがどの方向に居るかを計算する。
-        Vector3 toTarget = (target.position - transform.position).normalized;
-        Debug.DrawRay(transform.position, toTarget * range, Color.cyan);
-
-        // 「自分の正面とターゲットがいる方向の内積」と「ターゲットとの距離」を計算する。
-        float dot = Vector3.Dot(transform.forward, toTarget);
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-        // 計算した内積と距離が一定範囲内だったら、発見したことにする。
-        if (dot >= angle && distanceToTarget <= range)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        // ターゲットのいる方向
+        Vector3 toTarget = target.position - transform.position;
+        // 自身の正面を 0°として、180°まで判定すればいいので、cos(視野角/2)を求める。
+        float cosHalf = Mathf.Cos(degree / 2 * Mathf.Deg2Rad);
+        // 自身の正面とターゲットがいる方向とのcosθの値を計算する。
+        float cosAngle = Vector3.Dot(transform.forward, toTarget) / (transform.forward.magnitude * toTarget.magnitude);
+        // ターゲットが視界範囲内に入っているかの結果を返す。
+        return cosAngle >= cosHalf && toTarget.magnitude < range;
     }
 
-    /// <summary>ターゲットとの間に障害物があるかどうか調べる</summary>
-    /// <param name="target"></param>
-    /// <param name="range"></param>
+    /// <summary>ターゲットとの間に障害物があるか判定する</summary>
+    /// <param name="target">判定するターゲット</param>
+    /// <param name="range">索敵範囲</param>
     /// <returns>true -> 障害物ナシ | false -> 障害物アリ</returns>
-    private bool TargetLook(Transform target, float range)
+    private bool LookTarget(Transform target, float range)
     {
-        // Playerを凝視する。
+        // ターゲットを見失った時に見る方向。
         _turnAroundDir = transform.forward;
+        // ターゲットを凝視する。
         transform.LookAt(target);
-
-        // Rayを飛ばして自身とターゲットの間に障害物があるかどうか確認する。
+        // ターゲットとの間の障害物があるかを調べるためにRaycastを飛ばす。
         Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, range);
 
-        // HitしたColliderのTagがPlayer以外だったら、凝視をやめる。
-        if (hit.collider.tag == "Player")
+        if (hit.collider.tag == $"{target.gameObject.tag}")
         {
             return true;
         }
@@ -89,6 +78,7 @@ public class SightController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        AddGizmos.DrawWireCone(transform.position, transform.forward, _searchRange, _searchAngle);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(transform.position, transform.forward * _searchRange);
     }
 }
