@@ -105,7 +105,7 @@ public class MazeCreaterExtend : MonoBehaviour
                 Debug.Log(e.ToString());
             }
         }
-
+        // Šg’£‚Å‚«‚éƒ|ƒCƒ“ƒg‚ª‚Ü‚¾‚ ‚Á‚½‚çŠg’£‚ð‘±‚¯‚éB
         if (startPoint.Count > 0)
         {
             _currentWall.Clear();
@@ -150,12 +150,4 @@ public class MazeCreaterExtend : MonoBehaviour
         Debug.Log(str);
         return str;
     }
-
-    //private enum Direction
-    //{
-    //    Up,
-    //    Down,
-    //    Left,
-    //    Right,
-    //}
 }
