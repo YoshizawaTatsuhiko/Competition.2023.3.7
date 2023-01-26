@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 649968482345420815}
   - component: {fileID: 7421491866648730667}
   - component: {fileID: 1125456978249853604}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Floar
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 7693823358222341823}
   - component: {fileID: 2491119677236826832}
   - component: {fileID: 1960125501578406389}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Floar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
