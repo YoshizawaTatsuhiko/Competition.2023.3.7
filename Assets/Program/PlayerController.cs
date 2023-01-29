@@ -17,10 +17,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")) * _speed;
         dir = Camera.main.transform.TransformDirection(dir);
-        dir.y = 0;
-        _rigidbody.velocity = dir * _speed;
+        dir.y = _rigidbody.velocity.y;
+        _rigidbody.velocity = dir;
         Vector3 camDir = Camera.main.transform.forward;
         camDir.y = 0;
         transform.forward = camDir;
