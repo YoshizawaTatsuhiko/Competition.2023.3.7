@@ -12,7 +12,21 @@ class MazeGenerator : MonoBehaviour
     public int Width { get => _size < 5 ? 5 : _size; }
     public int Height { get => _size < 5 ? 5 : _size; }
 
-    [SerializeField, Tooltip("–À˜H‚ğŒ`¬‚·‚éobject")]
+    [SerializeField]
+    private GameObject _path = null;
+    [SerializeField]
+    private GameObject _wall = null;
+    [SerializeField]
+    private GameObject _start = null;
+    [SerializeField]
+    private GameObject _goal = null;
+    [SerializeField]
+    private GameObject _gimic = null;
+    [SerializeField]
+    private GameObject _ceiling = null;
+    /// <summary>‰®ª‚ğ¶¬‚·‚éÀ•W(–À˜H‚ğ¶¬‚µ‚Ä‚©‚ç‰®ª‚ğ‚©‚Ô‚¹‚é‚½‚ß)</summary>
+    private Vector3 _ceilingPos = Vector3.zero;
+    /// <summary>–À˜H‚ğŒ`¬‚·‚éobject</summary>
     private GameObject[] _go = null;
     /// <summary>ì¬‚µ‚½–À˜H</summary>
     private MazeCreaterExtend _maze = null;
@@ -40,6 +54,8 @@ class MazeGenerator : MonoBehaviour
         GameObject floorParent = new GameObject("Floor Parent");
         GameObject otherParent = new GameObject("Other Parent");
 
+        _go = new GameObject[] { _wall, _path, _start, _goal, _gimic, _ceiling};
+
         for (int i = 0; i < _bluePrint.GetLength(0); i++)
         {
             for (int j = 0; j < _bluePrint.GetLength(1); j++)
@@ -56,6 +72,9 @@ class MazeGenerator : MonoBehaviour
                     new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, otherParent.transform);
             }
         }
+        _ceilingPos.y = Vector3.zero.y + _wall.transform.localScale.y / 2f;
+        GameObject ceiling = Instantiate(_go[5], _ceilingPos, Quaternion.identity, otherParent.transform);
+        ceiling.transform.localScale = new Vector3(Width, 0.1f, Height);
     }
 
     /// <summary>ˆêŸŒ³”z—ñ‚ğ“ñŸŒ³”z—ñ‚É•ÏŠ·‚·‚é(stringŒ^ŒÀ’è)</summary>
