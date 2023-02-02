@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MarkerController : MonoBehaviour
 {
-    [SerializeField]
     private float _height = 1f;
     private Transform _playerPos = null;
 
@@ -35,7 +34,7 @@ public class MarkerController : MonoBehaviour
             x = Mathf.Ceil(x - 0.5f);
             z = Mathf.Ceil(z - 0.5f);
         }
-
+        _height = pos.y + 5f;
         transform.position = new Vector3(x, _height, z);
     }
 }
