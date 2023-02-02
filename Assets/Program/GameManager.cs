@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         if (_goal.GoalJudge)
         {
             GameClear();
+            Debug.Log("Goal");
         }
     }
 
