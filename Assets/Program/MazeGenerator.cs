@@ -13,9 +13,11 @@ class MazeGenerator : MonoBehaviour
     public int Height { get => _size < 5 ? 5 : _size; }
 
     [SerializeField]
-    private GameObject _path = null;
-    [SerializeField]
     private GameObject _wall = null;
+    [SerializeField]
+    private GameObject _path = null;
+    /// <summary>¶¬‚·‚é‚Æ‚«‚Ì’Ê˜H‚ÌÀ•W</summary>
+    private float _pathHeight = 0f;
     [SerializeField]
     private GameObject _start = null;
     [SerializeField]
@@ -26,8 +28,6 @@ class MazeGenerator : MonoBehaviour
     private GameObject _ceiling = null;
     /// <summary>‰®ª‚ğ¶¬‚·‚éÀ•W(–À˜H‚ğ¶¬‚µ‚Ä‚©‚ç‰®ª‚ğ‚©‚Ô‚¹‚é‚½‚ß)</summary>
     private Vector3 _ceilingPos = Vector3.zero;
-    /// <summary>–À˜H‚ğŒ`¬‚·‚éobject</summary>
-    private GameObject[] _go = null;
     /// <summary>ì¬‚µ‚½–À˜H</summary>
     private MazeCreaterExtend _maze = null;
     /// <summary>–À˜H‚ÌİŒv}</summary>
@@ -54,26 +54,26 @@ class MazeGenerator : MonoBehaviour
         GameObject floorParent = new GameObject("Floor Parent");
         GameObject otherParent = new GameObject("Other Parent");
 
-        _go = new GameObject[] { _wall, _path, _start, _goal, _gimic, _ceiling};
+        _pathHeight = Vector3.zero.y + -_wall.transform.localScale.y / 2f;
 
         for (int i = 0; i < _bluePrint.GetLength(0); i++)
         {
             for (int j = 0; j < _bluePrint.GetLength(1); j++)
             {
-                if (_bluePrint[i, j] == "W") Instantiate(_go[0], 
+                if (_bluePrint[i, j] == "W") Instantiate(_wall,
                     new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, wallParent.transform);
-                if (_bluePrint[i, j] == "F") Instantiate(_go[1], 
-                    new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, floorParent.transform);
-                if (_bluePrint[i, j] == "S") Instantiate(_go[2],
-                    new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, otherParent.transform);
-                if (_bluePrint[i, j] == "G") Instantiate(_go[3],
-                    new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, otherParent.transform);
-                if (_bluePrint[i, j] == "C") Instantiate(_go[4],
-                    new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, otherParent.transform);
+                if (_bluePrint[i, j] == "F") Instantiate(_path,
+                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, floorParent.transform);
+                if (_bluePrint[i, j] == "S") Instantiate(_start,
+                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
+                if (_bluePrint[i, j] == "G") Instantiate(_goal,
+                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
+                if (_bluePrint[i, j] == "C") Instantiate(_gimic,
+                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
             }
         }
         _ceilingPos.y = Vector3.zero.y + _wall.transform.localScale.y / 2f;
-        GameObject ceiling = Instantiate(_go[5], _ceilingPos, Quaternion.identity, otherParent.transform);
+        GameObject ceiling = Instantiate(_ceiling, _ceilingPos, Quaternion.identity, otherParent.transform);
         ceiling.transform.localScale = new Vector3(Width, 0.1f, Height);
     }
 
