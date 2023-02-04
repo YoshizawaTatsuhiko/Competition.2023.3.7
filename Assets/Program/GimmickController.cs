@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class GimmickController : MonoBehaviour
 {
-    public void GimmickWakeUp(System.Action action)
-    {
-        bool isOnce = true;
+    private bool _isOnce = true;
 
-        if (isOnce)
+    public int GimmickWakeUp()
+    {
+        if (_isOnce)
         {
-            action();
-            isOnce = false;
+            Debug.Log("Called Only Once");
+            _isOnce = false;
+            return 1;
         }
+        return 0;
     }
 }

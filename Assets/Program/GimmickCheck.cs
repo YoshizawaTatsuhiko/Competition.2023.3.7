@@ -6,8 +6,8 @@ public class GimmickCheck : MonoBehaviour
 {
     [SerializeField]
     private float _checkRange = 1f;
-    [SerializeField]
-    private GameObject _gimmickObj = null;
+
+    public int GimmickWakeUpCount { get; private set; }
 
     private void FixedUpdate()
     {
@@ -17,10 +17,7 @@ public class GimmickCheck : MonoBehaviour
             {
                 if (hit.collider.gameObject.TryGetComponent(out GimmickController gimmick))
                 {
-                    gimmick.GimmickWakeUp(() =>
-                    {
-                        Debug.Log("Called Only Once");
-                    });
+                    GimmickWakeUpCount += gimmick.GimmickWakeUp();
                 }
                 else
                 {
