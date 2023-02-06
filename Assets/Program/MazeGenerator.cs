@@ -28,6 +28,8 @@ class MazeGenerator : MonoBehaviour
     private GameObject _ceiling = null;
     /// <summary>屋根を生成する座標(迷路を生成してから屋根をかぶせるため)</summary>
     private Vector3 _ceilingPos = Vector3.zero;
+    [SerializeField]
+    private GameObject _enemySpawn = null;
     /// <summary>作成した迷路</summary>
     private MazeCreaterExtend _maze = null;
     /// <summary>迷路の設計図</summary>
@@ -49,6 +51,9 @@ class MazeGenerator : MonoBehaviour
 
         SetSpotRandom(_bluePrint, _coordinateList, "C");
         SetSpotRandom(_bluePrint, _coordinateList, "C");
+        SetSpotRandom(_bluePrint, _coordinateList, "E");
+        SetSpotRandom(_bluePrint, _coordinateList, "E");
+        FindFurthestPoint(_bluePrint, point, _coordinateList, "E");
 
         GameObject wallParent = new GameObject("Wall Parent");
         GameObject floorParent = new GameObject("Floor Parent");
@@ -69,6 +74,8 @@ class MazeGenerator : MonoBehaviour
                 if (_bluePrint[i, j] == "G") Instantiate(_goal,
                     new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
                 if (_bluePrint[i, j] == "C") Instantiate(_gimic,
+                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
+                if (_bluePrint[i, j] == "E") Instantiate(_enemySpawn,
                     new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
             }
         }
@@ -105,12 +112,12 @@ class MazeGenerator : MonoBehaviour
         if (conditionCount < 0) conditionCount = 0;
         if (conditionCount > 4) conditionCount = 4;
 
-        // アルゴリズムの都合上、i * j == 奇数の場所しか条件に合う座標は存在しないので奇数番目の座標のみ検索する。
+        // i * j == 奇数の場所の中から、条件に合致する場所を検索する。
         for (int i = 1; i < bluePrint.GetLength(1) - 1; i += 2)
         {
             for (int j = 1; j < bluePrint.GetLength(0) - 1; j += 2)
             {
-                // 隣接する4方向のどれかが壁だったら、カウントする。
+                // 隣接する4方向のどれかが[conditionChar]だったら、カウントする。
                 int count = 0;
 
                 if (bluePrint[i, j - 1] == conditionChar) count++;
