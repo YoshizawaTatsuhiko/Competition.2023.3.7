@@ -7,10 +7,10 @@ using DG.Tweening;
 
 public class LoadScene : MonoBehaviour
 {
-    [Header("Fade in/out ‚·‚é‚Ü‚Å‚ÌŠÔ")]
-    [Tooltip("Fade in/out ‚·‚é‚Ü‚Å‚ÌŠÔ")] [SerializeField] float _fadeTime = 1f;
-    [Header("Fade in/out ‚³‚¹‚éPanel")]
-    [Tooltip("Fade in/out ‚³‚¹‚éPanel")]    [SerializeField] Image _image = null;
+    [SerializeField, Header("Fade in/out ‚·‚é‚Ü‚Å‚ÌŠÔ")]
+    private float _fadeTime = 1f;
+    [SerializeField, Header("Fade in/out ‚³‚¹‚éPanel")]
+    private Image _image = null;
 
     void Start()
     {

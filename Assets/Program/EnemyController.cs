@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
     }
 
     private float _timer = 0f;
-    private bool _frag = true;
+    private bool _isChangeDirection = true;
 
     private void FixedUpdate()
     {
@@ -41,7 +41,7 @@ public class EnemyController : MonoBehaviour
         }
         else  // ターゲットが発見できていないとき
         {
-            if(_frag) StartCoroutine(Wander());
+            if(_isChangeDirection) StartCoroutine(Wander());
         }
         _rb.velocity = transform.forward * _moveSpeed;
     }
@@ -49,13 +49,12 @@ public class EnemyController : MonoBehaviour
     /// <summary>オブジェクトがウロウロする</summary>
     private IEnumerator Wander()
     {
-        _frag = false;
-        Debug.Log("Call");
+        _isChangeDirection = false;
         Vector3 random = Random.insideUnitSphere;
         _direction = new Vector3(random.x, 0f, random.z).normalized;
         transform.forward = _direction;
 
         yield return new WaitForSeconds(_waitTime);
-        _frag = true;
+        _isChangeDirection = true;
     }
 }
