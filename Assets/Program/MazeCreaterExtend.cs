@@ -1,43 +1,43 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>¶¬‚·‚é“x‚É\‘¢‚ª•Ï‰»‚·‚éƒ}ƒbƒv‚ğ¶¬‚·‚é</summary>
+/// <summary>ç”Ÿæˆã™ã‚‹åº¦ã«æ§‹é€ ãŒå¤‰åŒ–ã™ã‚‹ãƒãƒƒãƒ—ã‚’ç”Ÿæˆã™ã‚‹</summary>
 public class MazeCreaterExtend : MonoBehaviour
 {
-    /// <summary>•Ç¶¬ŠJn’n“_</summary>
+    /// <summary>å£ç”Ÿæˆé–‹å§‹åœ°ç‚¹</summary>
     List<(int, int)> _startPoint = new List<(int, int)>();
-    /// <summary>Šg’£’†‚Ì•Ç‚Ìî•ñ‚ğŠi”[‚·‚é</summary>
+    /// <summary>æ‹¡å¼µä¸­ã®å£ã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹</summary>
     Stack<(int, int)> _currentWall = new Stack<(int, int)>();
 
     #region Maze Generation Algorithm
 
-    /// <summary>–À˜H‚ğ¶¬‚·‚é</summary>
+    /// <summary>è¿·è·¯ã‚’ç”Ÿæˆã™ã‚‹</summary>
     public string GenerateMaze(int width, int height)
     {
-        // c‰¡‚Ì‘å‚«‚³‚ª5–¢–‚¾‚Á‚½‚ç¶¬‚µ‚È‚¢B
+        // ç¸¦æ¨ªã®å¤§ãã•ãŒ5æœªæº€ã ã£ãŸã‚‰ç”Ÿæˆã—ãªã„ã€‚
         if (width < 5 || height < 5) throw new System.ArgumentOutOfRangeException();
-        // c(‰¡)‚Ì’l‚ª‹ô”‚¾‚Á‚½‚çAŠï”‚É•ÏŠ·‚·‚éB
+        // ç¸¦(æ¨ª)ã®å€¤ãŒå¶æ•°ã ã£ãŸã‚‰ã€å¥‡æ•°ã«å¤‰æ›ã™ã‚‹ã€‚
         width = width % 2 == 0 ? width + 1 : width;
         height = height % 2 == 0 ? height + 1 : height;
 
-        // –À˜H‚Ìî•ñ‚ğŠi”[‚·‚éB
+        // è¿·è·¯ã®æƒ…å ±ã‚’æ ¼ç´ã™ã‚‹ã€‚
         string[,] maze = new string[width, height];
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                // ŠOü‚ğ•Ç‚ÅˆÍ‚ŞB
+                // å¤–å‘¨ã‚’å£ã§å›²ã‚€ã€‚
                 if (x * y == 0 || x == width - 1 || y == height - 1)
                 {
                     maze[x, y] = "W";
                 }
-                // ŠOüˆÈŠO‚Í°‚Å–„‚ß‚éB
+                // å¤–å‘¨ä»¥å¤–ã¯åºŠã§åŸ‹ã‚ã‚‹ã€‚
                 else
                 {
                     maze[x, y] = "F";
-                    // •Ç¶¬ŠJnÀ•WŒó•â‚ğƒŠƒXƒg‚É’Ç‰Á‚·‚éB
+                    // å£ç”Ÿæˆé–‹å§‹åº§æ¨™å€™è£œã‚’ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹ã€‚
                     if (x % 2 == 0 && y % 2 == 0)
                     {
                         _startPoint.Add((x, y));
@@ -50,7 +50,7 @@ public class MazeCreaterExtend : MonoBehaviour
         return ArrayToString(maze);
     }
 
-    /// <summary>•Ç‚ğŠg’£‚·‚é</summary>
+    /// <summary>å£ã‚’æ‹¡å¼µã™ã‚‹</summary>
     private void ExtendWall(string[,] maze, List<(int, int)> startPoint)
     {
         int index = Random.Range(0, startPoint.Count);
@@ -61,16 +61,16 @@ public class MazeCreaterExtend : MonoBehaviour
 
         while (isFloor)
         {
-            // Šg’£‚Å‚«‚é•ûŒü‚ğŠi”[‚·‚éƒŠƒXƒg
+            // æ‹¡å¼µã§ãã‚‹æ–¹å‘ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
             List<string> dirs = new List<string>();
 
             if (maze[x, y - 1] == "F" && !IsCurrentWall(x, y - 2)) dirs.Add("Up");
             if (maze[x, y + 1] == "F" && !IsCurrentWall(x, y + 2)) dirs.Add("Down");
             if (maze[x - 1, y] == "F" && !IsCurrentWall(x - 2, y)) dirs.Add("Left");
             if (maze[x + 1, y] == "F" && !IsCurrentWall(x + 2, y)) dirs.Add("Right");
-            // Šg’£‚·‚é•ûŒü‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚çAƒ‹[ƒv‚ğ”²‚¯‚é
+            // æ‹¡å¼µã™ã‚‹æ–¹å‘ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã‚‰ã€ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
             if (dirs.Count == 0) break;
-            // •Ç‚ğİ’u‚·‚é
+            // å£ã‚’è¨­ç½®ã™ã‚‹
             SetWall(maze, x, y);
             int dirsIndex = Random.Range(0, dirs.Count);
             try
@@ -104,7 +104,7 @@ public class MazeCreaterExtend : MonoBehaviour
                 Debug.Log(e.ToString());
             }
         }
-        // Šg’£‚Å‚«‚éƒ|ƒCƒ“ƒg‚ª‚Ü‚¾‚ ‚Á‚½‚çŠg’£‚ğ‘±‚¯‚éB
+        // æ‹¡å¼µã§ãã‚‹ãƒã‚¤ãƒ³ãƒˆãŒã¾ã ã‚ã£ãŸã‚‰æ‹¡å¼µã‚’ç¶šã‘ã‚‹ã€‚
         if (startPoint.Count > 0)
         {
             _currentWall.Clear();
@@ -112,11 +112,11 @@ public class MazeCreaterExtend : MonoBehaviour
         }
     }
 
-    /// <summary>•Ç‚ğİ’u‚·‚é</summary>
+    /// <summary>å£ã‚’è¨­ç½®ã™ã‚‹</summary>
     private void SetWall(string[,] maze, int x, int y)
     {
         maze[x, y] = "W";
-        // x, y‚ª‹¤‚É‹ô”‚¾‚Á‚½‚çAƒŠƒXƒg‚©‚çíœ‚µAƒXƒ^ƒbƒN‚ÉŠi”[‚·‚éB
+        // x, yãŒå…±ã«å¶æ•°ã ã£ãŸã‚‰ã€ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã—ã€ã‚¹ã‚¿ãƒƒã‚¯ã«æ ¼ç´ã™ã‚‹ã€‚
         if (x % 2 == 0 && y % 2 == 0)
         {
             _startPoint.Remove((x, y));
@@ -124,16 +124,16 @@ public class MazeCreaterExtend : MonoBehaviour
         }
     }
 
-    /// <summary>Šg’£’†‚Ì•Ç‚©‚Ç‚¤‚©”»’è‚·‚é</summary>
-    /// <returns>true -> Šg’£’† | false -> Šg’£Ï</returns>
+    /// <summary>æ‹¡å¼µä¸­ã®å£ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹</summary>
+    /// <returns>true -> æ‹¡å¼µä¸­ | false -> æ‹¡å¼µæ¸ˆ</returns>
     private bool IsCurrentWall(int x, int y)
     {
         return _currentWall.Contains((x, y));
     }
 
-    /// <summary>–À˜H‚ğ•¶š—ñ‚É‚µ‚Ä•\¦‚·‚é</summary>
-    /// <param name="maze">–À˜H</param>
-    /// <returns>•¶š—ñ‰»‚µ‚½–À˜H</returns>
+    /// <summary>è¿·è·¯ã‚’æ–‡å­—åˆ—ã«ã—ã¦è¡¨ç¤ºã™ã‚‹</summary>
+    /// <param name="maze">è¿·è·¯</param>
+    /// <returns>æ–‡å­—åˆ—åŒ–ã—ãŸè¿·è·¯</returns>
     private string ArrayToString(string[,] maze)
     {
         string str = "";

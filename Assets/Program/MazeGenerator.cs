@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -16,7 +16,7 @@ class MazeGenerator : MonoBehaviour
     private GameObject _wall = null;
     [SerializeField]
     private GameObject _path = null;
-    /// <summary>¶¬‚·‚é‚Æ‚«‚Ì’Ê˜H‚ÌÀ•W</summary>
+    /// <summary>ç”Ÿæˆã™ã‚‹ã¨ãã®é€šè·¯ã®åº§æ¨™</summary>
     private float _pathHeight = 0f;
     [SerializeField]
     private GameObject _start = null;
@@ -26,15 +26,15 @@ class MazeGenerator : MonoBehaviour
     private GameObject _gimic = null;
     [SerializeField]
     private GameObject _ceiling = null;
-    /// <summary>‰®ª‚ğ¶¬‚·‚éÀ•W(–À˜H‚ğ¶¬‚µ‚Ä‚©‚ç‰®ª‚ğ‚©‚Ô‚¹‚é‚½‚ß)</summary>
+    /// <summary>å±‹æ ¹ã‚’ç”Ÿæˆã™ã‚‹åº§æ¨™(è¿·è·¯ã‚’ç”Ÿæˆã—ã¦ã‹ã‚‰å±‹æ ¹ã‚’ã‹ã¶ã›ã‚‹ãŸã‚)</summary>
     private Vector3 _ceilingPos = Vector3.zero;
     [SerializeField]
     private GameObject _enemySpawn = null;
-    /// <summary>ì¬‚µ‚½–À˜H</summary>
+    /// <summary>ä½œæˆã—ãŸè¿·è·¯</summary>
     private MazeCreaterExtend _maze = null;
-    /// <summary>–À˜H‚ÌİŒv}</summary>
+    /// <summary>è¿·è·¯ã®è¨­è¨ˆå›³</summary>
     private string[,] _bluePrint;
-    /// <summary>”CˆÓ‚ÌƒCƒxƒ“ƒg‚ğ‹N‚±‚·À•W‚ğ“ü‚ê‚éƒŠƒXƒg</summary>
+    /// <summary>ä»»æ„ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã™åº§æ¨™ã‚’å…¥ã‚Œã‚‹ãƒªã‚¹ãƒˆ</summary>
     List<(int, int)> _coordinateList = new List<(int, int)>();
 
     private void Awake()
@@ -84,9 +84,9 @@ class MazeGenerator : MonoBehaviour
         ceiling.transform.localScale = new Vector3(Width, 0.1f, Height);
     }
 
-    /// <summary>ˆêŸŒ³”z—ñ‚ğ“ñŸŒ³”z—ñ‚É•ÏŠ·‚·‚é(stringŒ^ŒÀ’è)</summary>
-    /// <param name="array">stringŒ^‚ÌˆêŸŒ³”z—ñ</param>
-    /// <param name="twoDimensionalArray">stringŒ^‚Ì“ñŸŒ³”z—ñ</param>
+    /// <summary>ä¸€æ¬¡å…ƒé…åˆ—ã‚’äºŒæ¬¡å…ƒé…åˆ—ã«å¤‰æ›ã™ã‚‹(stringå‹é™å®š)</summary>
+    /// <param name="array">stringå‹ã®ä¸€æ¬¡å…ƒé…åˆ—</param>
+    /// <param name="twoDimensionalArray">stringå‹ã®äºŒæ¬¡å…ƒé…åˆ—</param>
     private string[,] To2DArray(string[] array, string[,] twoDimensionalArray)
     {
         for (int i = 0; i < twoDimensionalArray.GetLength(0); i++)
@@ -101,23 +101,23 @@ class MazeGenerator : MonoBehaviour
 
     #region Event Method
 
-    /// <summary>—×Ú‚µ‚½•¶š‚ğŒŸõ‚µ‚ÄAğŒ‚É‡’v‚µ‚½À•W‚ğƒŠƒXƒgƒAƒbƒv‚·‚é</summary>
-    /// <param name="conditionChar">’m‚è‚½‚¢À•W‚É—×Ú‚·‚é•¶š</param>
-    /// <param name="conditionCount">—×Ú‚·‚éAğŒ‚Æ‚È‚é•¶š‚ÌŒÂ”</param>
-    /// <returns>ğŒ‚É‡’v‚µ‚½À•W‚ğŠi”[‚µ‚½ƒŠƒXƒgu(int, int)Œ^v</returns>
+    /// <summary>éš£æ¥ã—ãŸæ–‡å­—ã‚’æ¤œç´¢ã—ã¦ã€æ¡ä»¶ã«åˆè‡´ã—ãŸåº§æ¨™ã‚’ãƒªã‚¹ãƒˆã‚¢ãƒƒãƒ—ã™ã‚‹</summary>
+    /// <param name="conditionChar">çŸ¥ã‚ŠãŸã„åº§æ¨™ã«éš£æ¥ã™ã‚‹æ–‡å­—</param>
+    /// <param name="conditionCount">éš£æ¥ã™ã‚‹ã€æ¡ä»¶ã¨ãªã‚‹æ–‡å­—ã®å€‹æ•°</param>
+    /// <returns>æ¡ä»¶ã«åˆè‡´ã—ãŸåº§æ¨™ã‚’æ ¼ç´ã—ãŸãƒªã‚¹ãƒˆã€Œ(int, int)å‹ã€</returns>
     private List<(int, int)> FindMazePoint(string[,] bluePrint, string conditionChar, int conditionCount)
     {
-        // ğŒ‚É‡’v‚µ‚½À•W‚ğŠi”[‚·‚éƒŠƒXƒg
+        // æ¡ä»¶ã«åˆè‡´ã—ãŸåº§æ¨™ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
         List<(int, int)> coordinateList = new List<(int, int)>();
         if (conditionCount < 0) conditionCount = 0;
         if (conditionCount > 4) conditionCount = 4;
 
-        // i * j == Šï”‚ÌêŠ‚Ì’†‚©‚çAğŒ‚É‡’v‚·‚éêŠ‚ğŒŸõ‚·‚éB
+        // i * j == å¥‡æ•°ã®å ´æ‰€ã®ä¸­ã‹ã‚‰ã€æ¡ä»¶ã«åˆè‡´ã™ã‚‹å ´æ‰€ã‚’æ¤œç´¢ã™ã‚‹ã€‚
         for (int i = 1; i < bluePrint.GetLength(1) - 1; i += 2)
         {
             for (int j = 1; j < bluePrint.GetLength(0) - 1; j += 2)
             {
-                // —×Ú‚·‚é4•ûŒü‚Ì‚Ç‚ê‚©‚ª[conditionChar]‚¾‚Á‚½‚çAƒJƒEƒ“ƒg‚·‚éB
+                // éš£æ¥ã™ã‚‹4æ–¹å‘ã®ã©ã‚Œã‹ãŒ[conditionChar]ã ã£ãŸã‚‰ã€ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹ã€‚
                 int count = 0;
 
                 if (bluePrint[i, j - 1] == conditionChar) count++;
@@ -134,15 +134,15 @@ class MazeGenerator : MonoBehaviour
         return coordinateList;
     }
 
-    /// <summary>“Á’è‚ÌÀ•W‚©‚çÅ‚à‰“‚¢À•W‚ğŒ©‚Â‚¯A•¶š‚ğ”z’u‚·‚é</summary>
-    /// <param name="point">Šî€‚Æ‚È‚éÀ•W</param>
-    /// <param name="coordinateList">•¶š‚ğ”z’u‚·‚éŒó•âÀ•W‚ÌƒŠƒXƒg</param>
-    /// <param name="chara">”z’u‚·‚é•¶š</param>
+    /// <summary>ç‰¹å®šã®åº§æ¨™ã‹ã‚‰æœ€ã‚‚é ã„åº§æ¨™ã‚’è¦‹ã¤ã‘ã€æ–‡å­—ã‚’é…ç½®ã™ã‚‹</summary>
+    /// <param name="point">åŸºæº–ã¨ãªã‚‹åº§æ¨™</param>
+    /// <param name="coordinateList">æ–‡å­—ã‚’é…ç½®ã™ã‚‹å€™è£œåº§æ¨™ã®ãƒªã‚¹ãƒˆ</param>
+    /// <param name="chara">é…ç½®ã™ã‚‹æ–‡å­—</param>
     private void FindFurthestPoint(string[,] bluePrint, (int, int) point, List<(int, int)> coordinateList, string chara)
     {
         if (coordinateList.Count == 0)
         {
-            Debug.LogWarning("Œó•â’n“_‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B");
+            Debug.LogWarning("å€™è£œåœ°ç‚¹ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚");
             return;
         }
 
@@ -151,32 +151,32 @@ class MazeGenerator : MonoBehaviour
 
         foreach ((int, int) n in coordinateList)
         {
-            // ƒsƒ^ƒSƒ‰ƒX‚Ì’è—‚ğg‚Á‚ÄAÅ‚à‰“‚¢À•W‚ğŒŸõ‚·‚éB
+            // ãƒ”ã‚¿ã‚´ãƒ©ã‚¹ã®å®šç†ã‚’ä½¿ã£ã¦ã€æœ€ã‚‚é ã„åº§æ¨™ã‚’æ¤œç´¢ã™ã‚‹ã€‚
             int distance =
                 (n.Item1 - point.Item1) * (n.Item1 - point.Item1) + (n.Item2 - point.Item2) * (n.Item2 - point.Item2);
 
-            // Å‚à‰“‚¢À•W‚Ìb’è1ˆÊ‚ğXV‚µ‚Ä‚¢‚­B
+            // æœ€ã‚‚é ã„åº§æ¨™ã®æš«å®š1ä½ã‚’æ›´æ–°ã—ã¦ã„ãã€‚
             if (max < distance)
             {
                 max = distance;
                 tapple = n;
             }
         }
-        // “Á’è‚ÌÀ•W‚É•¶š‚ğ”z’u‚µ‚½‚çA‚»‚ÌÀ•W‚ğƒŠƒXƒg‚©‚çíœ‚·‚éB
-        // ‚±‚ê‚É‚æ‚èA“¯‚¶ƒŠƒXƒgg‚Á‚Ä‚¢‚éŒÀ‚èAã‘‚«‚³‚ê‚é‚±‚Æ‚Í–³‚­‚È‚éB
+        // ç‰¹å®šã®åº§æ¨™ã«æ–‡å­—ã‚’é…ç½®ã—ãŸã‚‰ã€ãã®åº§æ¨™ã‚’ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹ã€‚
+        // ã“ã‚Œã«ã‚ˆã‚Šã€åŒã˜ãƒªã‚¹ãƒˆä½¿ã£ã¦ã„ã‚‹é™ã‚Šã€ä¸Šæ›¸ãã•ã‚Œã‚‹ã“ã¨ã¯ç„¡ããªã‚‹ã€‚
         bluePrint[tapple.Item1, tapple.Item2] = chara;
         coordinateList.Remove(tapple);
     }
 
-    /// <summary>”CˆÓ‚Ì•¶š‚ğƒ‰ƒ“ƒ_ƒ€‚ÈÀ•W‚É”z’u‚·‚é</summary>
-    /// <param name="coordinateList">•¶š‚ğ”z’u‚·‚éŒó•âÀ•W‚ÌƒŠƒXƒg</param>
-    /// <param name="chara">”z’u‚·‚é•¶š</param>
+    /// <summary>ä»»æ„ã®æ–‡å­—ã‚’ãƒ©ãƒ³ãƒ€ãƒ ãªåº§æ¨™ã«é…ç½®ã™ã‚‹</summary>
+    /// <param name="coordinateList">æ–‡å­—ã‚’é…ç½®ã™ã‚‹å€™è£œåº§æ¨™ã®ãƒªã‚¹ãƒˆ</param>
+    /// <param name="chara">é…ç½®ã™ã‚‹æ–‡å­—</param>
     private (int, int) SetSpotRandom(string[,] bluePrint, List<(int, int)> coordinateList, string chara)
     {
         (int, int) tapple = (0, 0);
 
-        // Œó•âÀ•W‚ÌƒŠƒXƒg‚Ì—v‘f‚ÉGUID‚ğˆê“I‚ÉŠ„‚è“–‚Ä‚ÄAƒ\[ƒg‚·‚éB
-        // GUID‚Ì’l‚Íƒ‰ƒ“ƒ_ƒ€‚È‚Ì‚ÅA—v‘f‚Ì‡”Ô‚ªƒoƒ‰ƒoƒ‰‚É‚È‚éB
+        // å€™è£œåº§æ¨™ã®ãƒªã‚¹ãƒˆã®è¦ç´ ã«GUIDã‚’ä¸€æ™‚çš„ã«å‰²ã‚Šå½“ã¦ã¦ã€ã‚½ãƒ¼ãƒˆã™ã‚‹ã€‚
+        // GUIDã®å€¤ã¯ãƒ©ãƒ³ãƒ€ãƒ ãªã®ã§ã€è¦ç´ ã®é †ç•ªãŒãƒãƒ©ãƒãƒ©ã«ãªã‚‹ã€‚
         foreach ((int, int) p in coordinateList.OrderBy(_ => System.Guid.NewGuid()))
         {
             bluePrint[p.Item1, p.Item2] = chara;

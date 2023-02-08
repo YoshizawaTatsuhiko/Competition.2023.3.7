@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,22 +10,22 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private UnityEvent _gameOver = new();
     private GameObject _player = null;
-    /// <summary>ƒQ[ƒ€‚ªn‚Ü‚Á‚½‚ÉPlayer‚ğ¶¬‚·‚éÀ•W</summary>
+    /// <summary>ã‚²ãƒ¼ãƒ ãŒå§‹ã¾ã£ãŸæ™‚ã«Playerã‚’ç”Ÿæˆã™ã‚‹åº§æ¨™</summary>
     private Vector3 _startPoint = new();
-    /// <summary>Goal‚ğoŒ»‚·‚é‚½‚ß‚É‹N“®‚·‚éGimmick</summary>
+    /// <summary>Goalã‚’å‡ºç¾ã™ã‚‹ãŸã‚ã«èµ·å‹•ã™ã‚‹Gimmick</summary>
     private GimmickCheck _gimmick = null;
     private GoalController _goal = null;
 
     private void Start()
     {
-        // ƒQ[ƒ€ŠJn‚Éƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğŒ©‚¦‚È‚­‚·‚éB
+        // ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã«ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’è¦‹ãˆãªãã™ã‚‹ã€‚
         Cursor.visible = false;
 
-        // ƒQ[ƒ€ŠJn’n“_‚ÌÀ•W‚ğŒ©‚Â‚¯‚Ä‚¨‚­
+        // ã‚²ãƒ¼ãƒ é–‹å§‹åœ°ç‚¹ã®åº§æ¨™ã‚’è¦‹ã¤ã‘ã¦ãŠã
         _startPoint = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
         _startPoint.y += 1f;
 
-        // ResourcesƒtƒHƒ‹ƒ_[‚©‚çPlayer‚ğ¶¬‚·‚éB
+        // Resourcesãƒ•ã‚©ãƒ«ãƒ€ãƒ¼ã‹ã‚‰Playerã‚’ç”Ÿæˆã™ã‚‹ã€‚
         _player = Instantiate(Resources.Load<GameObject>("Player Prefab"), _startPoint, Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Marker"));
 
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // ‹N“®‚µ‚½Gimmick‚Ì”‚ªˆê’è”‚É’B‚µ‚½‚çAGoal‚ğoŒ»‚³‚¹‚éB
+        // èµ·å‹•ã—ãŸGimmickã®æ•°ãŒä¸€å®šæ•°ã«é”ã—ãŸã‚‰ã€Goalã‚’å‡ºç¾ã•ã›ã‚‹ã€‚
         if (_gimmick.GimmickWakeUpCount == 2)
         {
             _goal.gameObject.SetActive(true);
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>ƒQ[ƒ€ƒNƒŠƒA‚µ‚½‚ÉEvent‚ğŒÄ‚Ô</summary>
+    /// <summary>ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã—ãŸæ™‚ã«Eventã‚’å‘¼ã¶</summary>
     private void GameClear()
     {
         _gameClear.Invoke();
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Complete");
     }
 
-    /// <summary>ƒQ[ƒ€ƒI[ƒo[‚µ‚½‚ÉEvent‚ğŒÄ‚Ô</summary>
+    /// <summary>ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã—ãŸæ™‚ã«Eventã‚’å‘¼ã¶</summary>
     private void GameOver()
     {
         _gameOver.Invoke();

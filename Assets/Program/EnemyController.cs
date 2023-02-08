@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
     private SightController _sight = null;
     [SerializeField]
     private float _waitTime = 3f;
-    /// <summary>ƒEƒƒEƒ‚·‚é‚Æ‚«‚ÉŒü‚­•ûŒü</summary>
+    /// <summary>ã‚¦ãƒ­ã‚¦ãƒ­ã™ã‚‹ã¨ãã«å‘ãæ–¹å‘</summary>
     private Vector3 _direction = Vector3.zero;
 
     private void Start()
@@ -27,26 +27,26 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_sight.SearchTarget())  // ƒ^[ƒQƒbƒg‚ğ”­Œ©‚µ‚½‚Æ‚«
+        if (_sight.SearchTarget())  // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç™ºè¦‹ã—ãŸã¨ã
         {
-            if (!_sight.LookTarget())  // ƒ^[ƒQƒbƒg‚Æ‚ÌŠÔ‚ÉáŠQ•¨‚ª‚ ‚é
+            if (!_sight.LookTarget())  // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã®é–“ã«éšœå®³ç‰©ãŒã‚ã‚‹æ™‚
             {
                 _timer += Time.fixedDeltaTime;
-                if (_timer > _waitTime)  // ƒ^[ƒQƒbƒg‚ªáŠQ•¨‚Éˆê’èŠÔ‰B‚ê‚½‚çAõ“G‚µ‚È‚¨‚·B
+                if (_timer > _waitTime)  // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒéšœå®³ç‰©ã«ä¸€å®šæ™‚é–“éš ã‚ŒãŸã‚‰ã€ç´¢æ•µã—ãªãŠã™ã€‚
                 {
                     _timer = 0f;
                     return;
                 }
             }
         }
-        else  // ƒ^[ƒQƒbƒg‚ª”­Œ©‚Å‚«‚Ä‚¢‚È‚¢‚Æ‚«
+        else  // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒç™ºè¦‹ã§ãã¦ã„ãªã„ã¨ã
         {
             if(_isChangeDirection) StartCoroutine(Wander());
         }
         _rb.velocity = transform.forward * _moveSpeed;
     }
 
-    /// <summary>ƒIƒuƒWƒFƒNƒg‚ªƒEƒƒEƒ‚·‚é</summary>
+    /// <summary>ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚¦ãƒ­ã‚¦ãƒ­ã™ã‚‹</summary>
     private IEnumerator Wander()
     {
         _isChangeDirection = false;

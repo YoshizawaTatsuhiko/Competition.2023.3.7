@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,34 +13,34 @@ public class SightController : MonoBehaviour
 
     private Vector3 _lineOfSight = Vector3.zero;
 
-    /// <summary>ƒ^[ƒQƒbƒg‚ª‹ŠE“à‚É“ü‚Á‚Ä‚¢‚é‚©”»’è‚·‚é</summary>
-    /// <param name="target">”»’è‚·‚éƒ^[ƒQƒbƒg</param>
-    /// <param name="degree">‹–ìŠp(“x”–@)</param>
-    /// <param name="range">õ“G”ÍˆÍ</param>
-    /// <returns>true -> ”­Œ© | false -> –¢”­Œ© or Œ©¸‚Á‚½</returns>
+    /// <summary>ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦–ç•Œå†…ã«å…¥ã£ã¦ã„ã‚‹ã‹åˆ¤å®šã™ã‚‹</summary>
+    /// <param name="target">åˆ¤å®šã™ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ</param>
+    /// <param name="degree">è¦–é‡è§’(åº¦æ•°æ³•)</param>
+    /// <param name="range">ç´¢æ•µç¯„å›²</param>
+    /// <returns>true -> ç™ºè¦‹ | false -> æœªç™ºè¦‹ or è¦‹å¤±ã£ãŸ</returns>
     public bool SearchTarget()
     {
-        // ƒ^[ƒQƒbƒg‚Ì‚¢‚é•ûŒü
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã„ã‚‹æ–¹å‘
         Vector3 toTarget = _target.position - transform.position;
-        // ©g‚Ì³–Ê‚ğ 0‹‚Æ‚µ‚ÄA180‹‚Ü‚Å”»’è‚·‚ê‚Î‚¢‚¢‚Ì‚ÅAcos(‹–ìŠp/2)‚ğ‹‚ß‚éB
+        // è‡ªèº«ã®æ­£é¢ã‚’ 0Â°ã¨ã—ã¦ã€180Â°ã¾ã§åˆ¤å®šã™ã‚Œã°ã„ã„ã®ã§ã€cos(è¦–é‡è§’/2)ã‚’æ±‚ã‚ã‚‹ã€‚
         float cosHalf = Mathf.Cos(_searchDegree / 2 * Mathf.Deg2Rad);
-        // ©g‚Ì³–Ê‚Æƒ^[ƒQƒbƒg‚ª‚¢‚é•ûŒü‚Æ‚ÌcosƒÆ‚Ì’l‚ğŒvZ‚·‚éB
+        // è‡ªèº«ã®æ­£é¢ã¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã„ã‚‹æ–¹å‘ã¨ã®cosÎ¸ã®å€¤ã‚’è¨ˆç®—ã™ã‚‹ã€‚
         float cosAngle = Vector3.Dot(transform.forward, toTarget) / (transform.forward.magnitude * toTarget.magnitude);
-        // ƒ^[ƒQƒbƒg‚ª‹ŠE”ÍˆÍ“à‚É“ü‚Á‚Ä‚¢‚é‚©‚ÌŒ‹‰Ê‚ğ•Ô‚·B
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦–ç•Œç¯„å›²å†…ã«å…¥ã£ã¦ã„ã‚‹ã‹ã®çµæœã‚’è¿”ã™ã€‚
         return cosAngle >= cosHalf && toTarget.magnitude < _searchRange;
     }
 
-    /// <summary>ƒ^[ƒQƒbƒg‚Æ‚ÌŠÔ‚ÉáŠQ•¨‚ª‚ ‚é‚©”»’è‚·‚é</summary>
-    /// <param name="target">”»’è‚·‚éƒ^[ƒQƒbƒg</param>
-    /// <param name="range">õ“G”ÍˆÍ</param>
-    /// <returns>true -> áŠQ•¨ƒiƒV | false -> áŠQ•¨ƒAƒŠ</returns>
+    /// <summary>ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã®é–“ã«éšœå®³ç‰©ãŒã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹</summary>
+    /// <param name="target">åˆ¤å®šã™ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ</param>
+    /// <param name="range">ç´¢æ•µç¯„å›²</param>
+    /// <returns>true -> éšœå®³ç‰©ãƒŠã‚· | false -> éšœå®³ç‰©ã‚¢ãƒª</returns>
     public bool LookTarget()
     {
-        // ƒ^[ƒQƒbƒg‚ğŒ©¸‚Á‚½‚ÉŒ©‚é•ûŒüB
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¦‹å¤±ã£ãŸæ™‚ã«è¦‹ã‚‹æ–¹å‘ã€‚
         _lineOfSight = transform.forward;
-        // ƒ^[ƒQƒbƒg‚ğ‹Ã‹‚·‚éB
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å‡è¦–ã™ã‚‹ã€‚
         transform.LookAt(_target);
-        // ƒ^[ƒQƒbƒg‚Æ‚ÌŠÔ‚ÌáŠQ•¨‚ª‚ ‚é‚©‚ğ’²‚×‚é‚½‚ß‚ÉRaycast‚ğ”ò‚Î‚·B
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã®é–“ã®éšœå®³ç‰©ãŒã‚ã‚‹ã‹ã‚’èª¿ã¹ã‚‹ãŸã‚ã«Raycastã‚’é£›ã°ã™ã€‚
         Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange);
 
         if (hit.collider.tag == $"{_target.gameObject.tag}")

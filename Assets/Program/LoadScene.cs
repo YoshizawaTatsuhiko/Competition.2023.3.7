@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,32 +7,32 @@ using DG.Tweening;
 
 public class LoadScene : MonoBehaviour
 {
-    [SerializeField, Header("Fade in/out ‚·‚é‚Ü‚Å‚ÌŠÔ")]
+    [SerializeField, Header("Fade in/out ã™ã‚‹ã¾ã§ã®æ™‚é–“")]
     private float _fadeTime = 1f;
-    [SerializeField, Header("Fade in/out ‚³‚¹‚éPanel")]
+    [SerializeField, Header("Fade in/out ã•ã›ã‚‹Panel")]
     private Image _image = null;
 
     void Start()
     {
         if (_image != null)
         {
-            //Panel‚ğŒ©‚¦‚é‚æ‚¤‚É‚µ‚Ä‚¨‚­
+            //Panelã‚’è¦‹ãˆã‚‹ã‚ˆã†ã«ã—ã¦ãŠã
             _image.CrossFadeAlpha(1, 0, false);
-            //Fade in Š®—¹ŒãAPanel‚ğÁ‚·
+            //Fade in å®Œäº†å¾Œã€Panelã‚’æ¶ˆã™
             _image.enabled = true;
             _image.DOFade(0f, _fadeTime).OnComplete(() => _image.enabled = false);
         }
     }
 
-    /// <summary>ƒV[ƒ“‚ğ‘JˆÚ‚³‚¹‚é</summary>
-    /// <param name="sceneName">ƒV[ƒ“‚Ì–¼‘O</param>
+    /// <summary>ã‚·ãƒ¼ãƒ³ã‚’é·ç§»ã•ã›ã‚‹</summary>
+    /// <param name="sceneName">ã‚·ãƒ¼ãƒ³ã®åå‰</param>
     public void SceneToLoad(string sceneName)
     {
         if (_image != null)
         {
-            //Panel‚ğŒ©‚¦‚È‚­‚µ‚Ä‚¨‚­
+            //Panelã‚’è¦‹ãˆãªãã—ã¦ãŠã
             _image.CrossFadeAlpha(1, 0, false);
-            //Fade out Š®—¹ŒãAƒV[ƒ“‚ğ‘JˆÚ‚·‚é
+            //Fade out å®Œäº†å¾Œã€ã‚·ãƒ¼ãƒ³ã‚’é·ç§»ã™ã‚‹
             _image.enabled = true;
             _image.DOFade(1f, _fadeTime).OnComplete(() => SceneManager.LoadScene(sceneName));
         }

@@ -1,13 +1,13 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Ql‘—¿
+// å‚è€ƒè³‡æ–™
 // https://github.com/code-beans/GizmoExtensions/blob/master/src/GizmosExtensions.cs
 
 namespace MyGizmos
 {
-    /// <summary>V‚µ‚¢Gizmos‚ğ’Ç‰Á‚·‚é</summary>
+    /// <summary>æ–°ã—ã„Gizmosã‚’è¿½åŠ ã™ã‚‹</summary>
     public static class AddGizmos
     {
         public static void DrawWireCone(Vector3 coneTip, Vector3 direction, float height, float circleRadius, float segments = 20f)
@@ -15,14 +15,14 @@ namespace MyGizmos
             Vector3 dest = coneTip + direction.normalized * height;
             Gizmos.DrawLine(coneTip, dest);
 
-            //‰~‚Ì‰~‚ğ•`‚«n‚ß‚é’n“_
+            //å††éŒã®å††ã‚’æãå§‹ã‚ã‚‹åœ°ç‚¹
             Vector3 from = dest;
             from.y = circleRadius;
             Gizmos.DrawLine(dest, from);
 
             float degree = Mathf.PI * 2 * Mathf.Rad2Deg;
 
-            //‘‰Á—Ê‚ğ‹‚ß‚é
+            //å¢—åŠ é‡ã‚’æ±‚ã‚ã‚‹
             int addition = Mathf.RoundToInt(degree / segments);
         }
 
