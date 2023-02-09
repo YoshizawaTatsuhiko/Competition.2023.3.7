@@ -12,6 +12,8 @@ public class EnemyController : MonoBehaviour
     private SightController _sight = null;
     [SerializeField]
     private float _waitTime = 3f;
+    [SerializeField]
+    private float _range = 1f;
     /// <summary>ウロウロするときに向く方向</summary>
     private Vector3 _direction = Vector3.zero;
 
@@ -22,7 +24,6 @@ public class EnemyController : MonoBehaviour
         _sight = GetComponent<SightController>();
     }
 
-    private float _timer = 0f;
     private bool _isChangeDirection = true;
 
     private void FixedUpdate()
@@ -31,30 +32,39 @@ public class EnemyController : MonoBehaviour
         {
             if (!_sight.LookTarget())  // ターゲットとの間に障害物がある時
             {
-                _timer += Time.fixedDeltaTime;
-                if (_timer > _waitTime)  // ターゲットが障害物に一定時間隠れたら、索敵しなおす。
-                {
-                    _timer = 0f;
-                    return;
-                }
+                return;  // ターゲットが障害物に隠れたら、索敵しなおす。
             }
         }
-        else  // ターゲットが発見できていないとき
+        else if(Physics.Raycast(transform.position, transform.forward, _range))
         {
-            if(_isChangeDirection) StartCoroutine(Wander());
+            WanderMove();
         }
+        //else  // ターゲットが発見できていないとき
+        //{
+        //    if (_isChangeDirection) StartCoroutine(Wander());
+        //}
         _rb.velocity = transform.forward * _moveSpeed;
+        Debug.DrawRay(transform.position, transform.forward * _range, Color.cyan);
     }
 
-    /// <summary>オブジェクトがウロウロする</summary>
-    private IEnumerator Wander()
+    ///// <summary>オブジェクトがウロウロする</summary>
+    //private IEnumerator Wander()
+    //{
+    //    Debug.Log("Coroutine Start");
+    //    _isChangeDirection = false;
+    //    Vector3 random = Random.insideUnitSphere;
+    //    _direction = new Vector3(random.x, 0f, random.z).normalized;
+    //    transform.forward = _direction;
+
+    //    yield return new WaitForSeconds(_waitTime);
+    //    _isChangeDirection = true;
+    //    Debug.Log("Coroutine Finish");
+    //}
+
+    private void WanderMove()
     {
-        _isChangeDirection = false;
         Vector3 random = Random.insideUnitSphere;
         _direction = new Vector3(random.x, 0f, random.z).normalized;
         transform.forward = _direction;
-
-        yield return new WaitForSeconds(_waitTime);
-        _isChangeDirection = true;
     }
 }
