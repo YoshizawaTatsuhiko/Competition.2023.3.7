@@ -11,8 +11,6 @@ public class EnemyController : MonoBehaviour
     private Rigidbody _rb = null;
     private SightController _sight = null;
     [SerializeField]
-    private float _waitTime = 3f;
-    [SerializeField]
     private float _range = 1f;
     /// <summary>ウロウロするときに向く方向</summary>
     private Vector3 _direction = Vector3.zero;
@@ -23,8 +21,6 @@ public class EnemyController : MonoBehaviour
         _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         _sight = GetComponent<SightController>();
     }
-
-    private bool _isChangeDirection = true;
 
     private void FixedUpdate()
     {
@@ -37,34 +33,11 @@ public class EnemyController : MonoBehaviour
         }
         else if(Physics.Raycast(transform.position, transform.forward, _range))
         {
-            WanderMove();
+            Vector3 random = Random.insideUnitSphere;
+            _direction = new Vector3(random.x, 0f, random.z).normalized;
+            transform.forward = _direction;
         }
-        //else  // ターゲットが発見できていないとき
-        //{
-        //    if (_isChangeDirection) StartCoroutine(Wander());
-        //}
-        _rb.velocity = transform.forward * _moveSpeed;
         Debug.DrawRay(transform.position, transform.forward * _range, Color.cyan);
-    }
-
-    ///// <summary>オブジェクトがウロウロする</summary>
-    //private IEnumerator Wander()
-    //{
-    //    Debug.Log("Coroutine Start");
-    //    _isChangeDirection = false;
-    //    Vector3 random = Random.insideUnitSphere;
-    //    _direction = new Vector3(random.x, 0f, random.z).normalized;
-    //    transform.forward = _direction;
-
-    //    yield return new WaitForSeconds(_waitTime);
-    //    _isChangeDirection = true;
-    //    Debug.Log("Coroutine Finish");
-    //}
-
-    private void WanderMove()
-    {
-        Vector3 random = Random.insideUnitSphere;
-        _direction = new Vector3(random.x, 0f, random.z).normalized;
-        transform.forward = _direction;
+        _rb.velocity = transform.forward * _moveSpeed;
     }
 }
