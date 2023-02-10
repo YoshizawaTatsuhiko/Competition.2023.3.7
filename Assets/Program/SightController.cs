@@ -39,12 +39,14 @@ public class SightController : MonoBehaviour
         // ターゲットを見失った時に見る方向。
         _lineOfSight = transform.forward;
         // ターゲットを凝視する。
-        transform.LookAt(_target);
+        transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _target.position, 0.2f));
         // ターゲットとの間の障害物があるかを調べるためにRaycastを飛ばす。
         Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange);
+        Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.white);
 
         if (hit.collider.tag == $"{_target.gameObject.tag}")
         {
+
             return true;
         }
         else
