@@ -41,19 +41,21 @@ public class SightController : MonoBehaviour
         // ターゲットを凝視する。
         transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _target.position, 0.2f));
         // ターゲットとの間の障害物があるかを調べるためにRaycastを飛ばす。
-        Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange);
         Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.white);
-
-        if (hit.collider.tag == $"{_target.gameObject.tag}")
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange))
         {
+            if (hit.collider.tag == $"{ _target.gameObject.tag }")
+            {
+                return true;
+            }
+            else
+            {
+                transform.LookAt(null);
+                transform.forward = _lineOfSight;
+                return false;
+            }
+        }
 
-            return true;
-        }
-        else
-        {
-            transform.LookAt(null);
-            transform.forward = _lineOfSight;
-            return false;
-        }
+        return false;
     }
 }
