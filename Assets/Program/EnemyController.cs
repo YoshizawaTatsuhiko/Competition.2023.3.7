@@ -38,6 +38,6 @@ public class EnemyController : MonoBehaviour
             transform.forward = _direction;
         }
         Debug.DrawRay(transform.position, transform.forward * _range, Color.cyan);
-        _rb.velocity = transform.forward * _moveSpeed;
+        _rb.velocity = new Vector3(transform.forward.x * _moveSpeed, _rb.velocity.y, transform.forward.z * _moveSpeed);
     }
 }
