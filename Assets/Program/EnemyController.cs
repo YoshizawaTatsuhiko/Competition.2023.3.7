@@ -8,8 +8,10 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField]
     private float _moveSpeed = 1f;
-    private Rigidbody _rb = null;
+    private Rigidbody _rigidbody = null;
     private SightController _sight = null;
+    [SerializeField]
+    private float _distanceToTarget = 0.5f;
     [SerializeField]
     private float _range = 1f;
     /// <summary>ウロウロするときに向く方向</summary>
@@ -17,8 +19,8 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody>();
-        _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         _sight = GetComponent<SightController>();
     }
 
@@ -38,6 +40,15 @@ public class EnemyController : MonoBehaviour
             transform.forward = _direction;
         }
         Debug.DrawRay(transform.position, transform.forward * _range, Color.cyan);
-        _rb.velocity = new Vector3(transform.forward.x * _moveSpeed, _rb.velocity.y, transform.forward.z * _moveSpeed);
+
+        if (Vector2.Distance(transform.position, _sight.Target.position) >= _distanceToTarget)
+        {
+            _rigidbody.velocity = new Vector3(
+                transform.forward.x * _moveSpeed, _rigidbody.velocity.y, transform.forward.z * _moveSpeed);
+        }
+        else
+        {
+            _rigidbody.velocity = Vector3.zero;
+        }
     }
 }
