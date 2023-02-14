@@ -41,7 +41,7 @@ public class EnemyController : MonoBehaviour
         }
         Debug.DrawRay(transform.position, transform.forward * _range, Color.cyan);
 
-        if (Vector2.Distance(transform.position, _sight.Target.position) >= _distanceToTarget)
+        if (Vector2.Distance(transform.position, _sight.Target.position) > _distanceToTarget)
         {
             _rigidbody.velocity = new Vector3(
                 transform.forward.x * _moveSpeed, _rigidbody.velocity.y, transform.forward.z * _moveSpeed);

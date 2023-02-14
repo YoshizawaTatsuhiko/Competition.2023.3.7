@@ -6,6 +6,8 @@ public class SightController : MonoBehaviour
 {
     [SerializeField]
     private Transform _target = null;
+    public Transform Target { get => _target; private set => _target = value; }
+
     [SerializeField]
     private float _searchDegree = 30f;
     [SerializeField]
@@ -21,7 +23,7 @@ public class SightController : MonoBehaviour
     public bool SearchTarget()
     {
         // ターゲットのいる方向
-        Vector3 toTarget = _target.position - transform.position;
+        Vector3 toTarget = Target.position - transform.position;
         // 自身の正面を 0°として、180°まで判定すればいいので、cos(視野角/2)を求める。
         float cosHalf = Mathf.Cos(_searchDegree / 2 * Mathf.Deg2Rad);
         // 自身の正面とターゲットがいる方向とのcosθの値を計算する。
@@ -39,12 +41,12 @@ public class SightController : MonoBehaviour
         // ターゲットを見失った時に見る方向。
         _lineOfSight = transform.forward;
         // ターゲットを凝視する。
-        transform.LookAt(Vector3.Lerp(transform.forward + transform.position, _target.position, 0.2f));
+        transform.LookAt(Target);
         // ターゲットとの間の障害物があるかを調べるためにRaycastを飛ばす。
         Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.white);
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange))
         {
-            if (hit.collider.tag == $"{ _target.gameObject.tag }")
+            if (hit.collider.tag == $"{ Target.gameObject.tag }")
             {
                 return true;
             }
