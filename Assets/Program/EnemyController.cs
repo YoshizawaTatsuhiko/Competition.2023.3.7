@@ -14,8 +14,8 @@ public class EnemyController : MonoBehaviour
     private float _distanceToTarget = 0.5f;
     [SerializeField]
     private float _range = 1f;
-    /// <summary>ウロウロするときに向く方向</summary>
-    private Vector3 _direction = Vector3.zero;
+    [SerializeField]
+    private int[] _rotateDegree = new int[0];
 
     private void Start()
     {
@@ -35,20 +35,12 @@ public class EnemyController : MonoBehaviour
         }
         else if(Physics.Raycast(transform.position, transform.forward, _range))
         {
-            Vector3 random = Random.insideUnitSphere;
-            _direction = new Vector3(random.x, 0f, random.z).normalized;
-            transform.forward = _direction;
+            int randomIndex = Random.Range(0, _rotateDegree.Length);
+            transform.rotation = Quaternion.AngleAxis(_rotateDegree[randomIndex], Vector3.up);
         }
         Debug.DrawRay(transform.position, transform.forward * _range, Color.cyan);
 
-        if (Vector2.Distance(transform.position, _sight.Target.position) > _distanceToTarget)
-        {
-            _rigidbody.velocity = new Vector3(
+        _rigidbody.velocity = new Vector3(
                 transform.forward.x * _moveSpeed, _rigidbody.velocity.y, transform.forward.z * _moveSpeed);
-        }
-        else
-        {
-            _rigidbody.velocity = Vector3.zero;
-        }
     }
 }
