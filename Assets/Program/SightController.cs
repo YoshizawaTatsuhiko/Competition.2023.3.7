@@ -22,6 +22,7 @@ public class SightController : MonoBehaviour
     /// <returns>true -> 発見 | false -> 未発見 or 見失った</returns>
     public bool SearchTarget()
     {
+        if (Target == null) return false;
         // ターゲットのいる方向
         Vector3 toTarget = Target.position - transform.position;
         // 自身の正面を 0°として、180°まで判定すればいいので、cos(視野角/2)を求める。
