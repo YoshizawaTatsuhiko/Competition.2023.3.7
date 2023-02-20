@@ -10,8 +10,8 @@ public class EnemyController : MonoBehaviour
     private float _moveSpeed = 1f;
     private Rigidbody _rigidbody = null;
     private SightController _sight = null;
-    [SerializeField]
-    private float _distanceToTarget = 0.5f;
+    //[SerializeField]
+    //private float _distanceToTarget = 0.5f;
     [SerializeField]
     private float _range = 1f;
     [SerializeField]
