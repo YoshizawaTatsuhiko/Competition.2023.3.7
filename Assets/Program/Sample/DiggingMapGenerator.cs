@@ -1,35 +1,35 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// ŒŠŒ@‚è–@‚ğ—p‚¢‚Äƒ}ƒbƒv‚ğ¶¬‚·‚é
+/// ç©´æ˜ã‚Šæ³•ã‚’ç”¨ã„ã¦ãƒãƒƒãƒ—ã‚’ç”Ÿæˆã™ã‚‹
 /// </summary>
 public class DiggingMapGenerator : MonoBehaviour
 {
-    /// <summary>ŒŠ‚ğŒ@‚éŠJn’n“_‚Æ‚È‚éÀ•W‚ÌƒŠƒXƒg</summary>
+    /// <summary>ç©´ã‚’æ˜ã‚‹é–‹å§‹åœ°ç‚¹ã¨ãªã‚‹åº§æ¨™ã®ãƒªã‚¹ãƒˆ</summary>
     List<(int, int)> _startMasses = new List<(int, int)>();
-    /// <summary>ƒS[ƒ‹‚ğİ’u‚·‚éŒó•â‚Æ‚È‚éƒ}ƒX‚ÌƒŠƒXƒg</summary>
+    /// <summary>ã‚´ãƒ¼ãƒ«ã‚’è¨­ç½®ã™ã‚‹å€™è£œã¨ãªã‚‹ãƒã‚¹ã®ãƒªã‚¹ãƒˆ</summary>
     List<(int, int)> _goalMasses = new List<(int, int)>();
 
-    /// <summary>•‚Æ‚‚³‚É‰‚¶‚½ƒ}ƒbƒv‚ğ¶¬‚µA•¶š—ñ‚É‚µ‚Ä•Ô‚·</summary>
+    /// <summary>å¹…ã¨é«˜ã•ã«å¿œã˜ãŸãƒãƒƒãƒ—ã‚’ç”Ÿæˆã—ã€æ–‡å­—åˆ—ã«ã—ã¦è¿”ã™</summary>
     public string GenerateRandomMap(int width, int height)
     {
-        // “n‚³‚ê‚½”‚ª‹ô”‚È‚ç-1‚µ‚ÄŠï”‚É’¼‚·
+        // æ¸¡ã•ã‚ŒãŸæ•°ãŒå¶æ•°ãªã‚‰-1ã—ã¦å¥‡æ•°ã«ç›´ã™
         int h = height % 2 != 0 ? height : height - 1;
         int w = width % 2 != 0 ? width : width - 1;
-        // ŠOü‚ğ’Ê˜HA‚»‚êˆÈŠO‚ğ•Ç‚É‚·‚é
+        // å¤–å‘¨ã‚’é€šè·¯ã€ãã‚Œä»¥å¤–ã‚’å£ã«ã™ã‚‹
         string[,] map = new string[h, w];
         for (int i = 0; i < h; i++)
             for (int j = 0; j < w; j++)
                 map[i, j] = i * j == 0 || i == h - 1 || j == w - 1 ? "O" : "W";
-        // ŒŠ‚ğŒ@‚é
+        // ç©´ã‚’æ˜ã‚‹
         _startMasses.Add((1, 1));
-        // ˆê–{“¹‚¾‚Á‚½Û‚ÉƒS[ƒ‹‚Ü‚½‚ÍƒXƒ^[ƒg‚ª¶¬‚³‚ê‚È‚¢‚Ì‚ğ–h‚®‚½‚ß‚ÉƒS[ƒ‹ƒ}ƒX‚Æ‚µ‚Ä‚à’Ç‰Á
+        // ä¸€æœ¬é“ã ã£ãŸéš›ã«ã‚´ãƒ¼ãƒ«ã¾ãŸã¯ã‚¹ã‚¿ãƒ¼ãƒˆãŒç”Ÿæˆã•ã‚Œãªã„ã®ã‚’é˜²ããŸã‚ã«ã‚´ãƒ¼ãƒ«ãƒã‚¹ã¨ã—ã¦ã‚‚è¿½åŠ 
         _goalMasses.Add((1, 1));
         DiggingPath(map, _startMasses);
-        // ŠOü‚ğ•Ç‚É–ß‚·
+        // å¤–å‘¨ã‚’å£ã«æˆ»ã™
         for (int i = 0; i < /*map.GetLength(0)*/ h; i++)
         {
             map[i, 0] = "W";
@@ -40,31 +40,31 @@ public class DiggingMapGenerator : MonoBehaviour
             map[0, i] = "W";
             map[/*map.GetLength(0)*/ w - 1, i] = "W";
         }
-        // …˜H‚ğİ’u‚·‚é
+        // æ°´è·¯ã‚’è¨­ç½®ã™ã‚‹
         SetWaterPath(map, w, h, 10);
-        // ƒS[ƒ‹‚ÆƒXƒ^[ƒg‚ğİ’u‚·‚é
+        // ã‚´ãƒ¼ãƒ«ã¨ã‚¹ã‚¿ãƒ¼ãƒˆã‚’è¨­ç½®ã™ã‚‹
         SetSpotRandom(map, "E");
         SetSpotRandom(map, "P");
 
         return ArrayToString(map);
     }
 
-    /// <summary>’Ê˜H‚ğŒ@‚é</summary>
+    /// <summary>é€šè·¯ã‚’æ˜ã‚‹</summary>
     void DiggingPath(string[,] map, List<(int, int)> startMasses)
     {
-        // ŠJnÀ•W‚ÌƒŠƒXƒg‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚ÉŒˆ’è
+        // é–‹å§‹åº§æ¨™ã®ãƒªã‚¹ãƒˆã®ä¸­ã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºå®š
         int startIndex = Random.Range(0, startMasses.Count);
-        // ŠJnÀ•W‚ğƒZƒbƒg
+        // é–‹å§‹åº§æ¨™ã‚’ã‚»ãƒƒãƒˆ
         int x = startMasses[startIndex].Item1;
         int y = startMasses[startIndex].Item2;
-        // ŠJnÀ•W‚ÌƒŠƒXƒg‚©‚çíœ‚·‚é
+        // é–‹å§‹åº§æ¨™ã®ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
         startMasses.RemoveAt(startIndex);
 
         while (true)
         {
-            // Œ@‚èi‚ß‚é•ûŒü‚ğ•¶š—ñ‚ÅŠi”[‚·‚éƒŠƒXƒg
+            // æ˜ã‚Šé€²ã‚ã‚‹æ–¹å‘ã‚’æ–‡å­—åˆ—ã§æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
             List<string> dirs = new List<string>();
-            // ã‰º¶‰EA2ƒ}ƒXæ‚Ü‚Å•Ç‚©‚Ç‚¤‚©’²‚×‚é
+            // ä¸Šä¸‹å·¦å³ã€2ãƒã‚¹å…ˆã¾ã§å£ã‹ã©ã†ã‹èª¿ã¹ã‚‹
             if (map[x, y - 1] == "W" && map[x, y - 2] == "W")
                 dirs.Add("Up");
             if (map[x, y + 1] == "W" && map[x, y + 2] == "W")
@@ -73,11 +73,11 @@ public class DiggingMapGenerator : MonoBehaviour
                 dirs.Add("Left");
             if (map[x + 1, y] == "W" && map[x + 2, y] == "W")
                 dirs.Add("Right");
-            // Œ@‚ê‚é•ûŒü‚ª‚È‚¯‚ê‚Îƒ‹[ƒv‚ğ”²‚¯‚é
+            // æ˜ã‚Œã‚‹æ–¹å‘ãŒãªã‘ã‚Œã°ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
             if (dirs.Count == 0) break;
-            // ŠJnÀ•W‚ğŒ@‚é
+            // é–‹å§‹åº§æ¨™ã‚’æ˜ã‚‹
             map[x, y] = "O";
-            // Œ@‚é•ûŒü‚ğƒ‰ƒ“ƒ_ƒ€‚ÉŒˆ‚ß‚é
+            // æ˜ã‚‹æ–¹å‘ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºã‚ã‚‹
             int dirIndex = Random.Range(0, dirs.Count);
             switch (dirs[dirIndex])
             {
@@ -100,27 +100,27 @@ public class DiggingMapGenerator : MonoBehaviour
             }
         }
 
-        // Œ»İ‚ÌÀ•W‚ğƒS[ƒ‹‚ÌŒó•âƒ}ƒX‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
+        // ç¾åœ¨ã®åº§æ¨™ã‚’ã‚´ãƒ¼ãƒ«ã®å€™è£œãƒã‚¹ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
         _goalMasses.Add((x, y));
 
-        // ‚à‚µŠJnÀ•W‚ÌƒŠƒXƒg‚Ì’†g‚ª‚ ‚é‚È‚ç‚»‚±‚©‚ç’Ê˜H‚ğŒ@‚é
+        // ã‚‚ã—é–‹å§‹åº§æ¨™ã®ãƒªã‚¹ãƒˆã®ä¸­èº«ãŒã‚ã‚‹ãªã‚‰ãã“ã‹ã‚‰é€šè·¯ã‚’æ˜ã‚‹
         if (startMasses.Count > 0)
             DiggingPath(map, startMasses);
     }
 
-    /// <summary>w’è‚³‚ê‚½ƒ}ƒX‚ğŒ@‚é</summary>
+    /// <summary>æŒ‡å®šã•ã‚ŒãŸãƒã‚¹ã‚’æ˜ã‚‹</summary>
     void DiggingMass(string[,] map, int x, int y)
     {
         map[x, y] = "O";
-        // ‚à‚µ‚»‚ÌÀ•W‚ªx,y‹¤‚ÉŠï”‚È‚çŠJnÀ•W‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
+        // ã‚‚ã—ãã®åº§æ¨™ãŒx,yå…±ã«å¥‡æ•°ãªã‚‰é–‹å§‹åº§æ¨™ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
         if (x * y % 2 != 0)
             _startMasses.Add((x, y));
     }
 
     /// <summary>
-    /// …˜H‚ğˆø‚­
+    /// æ°´è·¯ã‚’å¼•ã
     /// </summary>
-    /// <param name="tri">s‰ñ”(‘å‚«‚¯‚ê‚Î…˜H‚ª‘‚¦‚é‰Â”\«‚ªã‚ª‚é)</param>
+    /// <param name="tri">è©¦è¡Œå›æ•°(å¤§ãã‘ã‚Œã°æ°´è·¯ãŒå¢—ãˆã‚‹å¯èƒ½æ€§ãŒä¸ŠãŒã‚‹)</param>
     void SetWaterPath(string[,] map, int width, int height, int tri)
     {
         for (int i = 0; i < tri; i++)
@@ -140,7 +140,7 @@ public class DiggingMapGenerator : MonoBehaviour
                 {
                     //int xx = baseX + addX;
                     //int yy = baseX + addY;
-                    //Debug.Log($"x‚Í0`{width / 2 * 2}Ay‚Í0`{height / 2 * 2}A•Ç({xx},{yy})");
+                    //Debug.Log($"xã¯0ï½{width / 2 * 2}ã€yã¯0ï½{height / 2 * 2}ã€å£({xx},{yy})");
                     if (map[baseY + addY, baseX + addX] == "O")
                     {
                         break;
@@ -153,15 +153,15 @@ public class DiggingMapGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>ƒ‰ƒ“ƒ_ƒ€‚Ès‚«~‚Ü‚è‚ÌˆÊ’u‚É”CˆÓ‚Ì•¶š‚ğİ’u‚·‚é</summary>
+    /// <summary>ãƒ©ãƒ³ãƒ€ãƒ ãªè¡Œãæ­¢ã¾ã‚Šã®ä½ç½®ã«ä»»æ„ã®æ–‡å­—ã‚’è¨­ç½®ã™ã‚‹</summary>
     void SetSpotRandom(string[,] map, string Char)
     {
-        // ƒS[ƒ‹Œó•â‚Ìƒ}ƒX‚ÌƒŠƒXƒg‚Ì’†‚©‚ç°‚Ìƒ}ƒX‚ğ’T‚·
+        // ã‚´ãƒ¼ãƒ«å€™è£œã®ãƒã‚¹ã®ãƒªã‚¹ãƒˆã®ä¸­ã‹ã‚‰åºŠã®ãƒã‚¹ã‚’æ¢ã™
         foreach ((int, int) mass in _goalMasses
             .OrderBy(_ => System.Guid.NewGuid())
             .Where(i => map[i.Item1, i.Item2] == "O"))
         {
-            // 3•ûŒü‚ª•Ç‚É‚È‚Á‚Ä‚¢‚éƒ}ƒX‚ğ’T‚·
+            // 3æ–¹å‘ãŒå£ã«ãªã£ã¦ã„ã‚‹ãƒã‚¹ã‚’æ¢ã™
             int count = 0;
             if (map[mass.Item1 - 1, mass.Item2] == "W" ||
                 map[mass.Item1 - 1, mass.Item2] == "S") count++;
@@ -175,13 +175,13 @@ public class DiggingMapGenerator : MonoBehaviour
             if (count == 3)
             {
                 map[mass.Item1, mass.Item2] = Char;
-                Debug.Log(Char + "‚ğ¶¬‚µ‚Ü‚µ‚½");
+                Debug.Log(Char + "ã‚’ç”Ÿæˆã—ã¾ã—ãŸ");
                 break;
             }
         }
     }
 
-    /// <summary>“ñŸŒ³”z—ñ‚ğ•¶š—ñ‚É‚µ‚Ä•Ô‚·</summary>
+    /// <summary>äºŒæ¬¡å…ƒé…åˆ—ã‚’æ–‡å­—åˆ—ã«ã—ã¦è¿”ã™</summary>
     string ArrayToString(string[,] array)
     {
         string str = "";
@@ -192,7 +192,7 @@ public class DiggingMapGenerator : MonoBehaviour
             if (i < array.GetLength(0) - 1)
                 str += '\n';
         }
-        Debug.Log(str); // ƒfƒoƒbƒO—p‚Éc‚µ‚Ä‚¨‚­
+        Debug.Log(str); // ãƒ‡ãƒãƒƒã‚°ç”¨ã«æ®‹ã—ã¦ãŠã
         return str;
     }
 }

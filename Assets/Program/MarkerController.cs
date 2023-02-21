@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MarkerController : MonoBehaviour
 {
-    private float _height = 1f;
     private Transform _playerPos = null;
 
     private void Update()
@@ -21,20 +20,9 @@ public class MarkerController : MonoBehaviour
             return;
         }
 
-        float x = pos.x;
-        float z = pos.z;
+        float x = Mathf.Round(pos.x);
+        float z = Mathf.Round(pos.z);
 
-        if (x > 0)
-        {
-            x = Mathf.Floor(x + 0.5f);
-            z = Mathf.Floor(z + 0.5f);
-        }
-        else
-        {
-            x = Mathf.Ceil(x - 0.5f);
-            z = Mathf.Ceil(z - 0.5f);
-        }
-        _height = pos.y + 5f;
-        transform.position = new Vector3(x, _height, z);
+        transform.position = new Vector3(x, pos.y + 5f, z);
     }
 }
