@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4529552123218153788}
   - component: {fileID: 4529552123218153791}
   - component: {fileID: 4529552123218153790}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 4529552123608786152}
   - component: {fileID: 4529552123608786149}
   - component: {fileID: 4529552123608786155}
+  - component: {fileID: 7781633320135555824}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Enemy
@@ -228,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d73d196d38dfd4b8e14bbabe15e467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 2
+  _moveSpeed: 1
   _range: 0.5
   _rotateDegree: a6ffffff000000005a000000b4000000
 --- !u!114 &4529552123608786155
@@ -246,3 +247,16 @@ MonoBehaviour:
   _target: {fileID: 0}
   _searchDegree: 30
   _searchRange: 15
+--- !u!114 &7781633320135555824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529552123608786147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82462e6edc07e834ebcf826df3246544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHP: 10
