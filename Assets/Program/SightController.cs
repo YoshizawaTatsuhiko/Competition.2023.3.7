@@ -15,6 +15,11 @@ public class SightController : MonoBehaviour
 
     private Vector3 _lineOfSight = Vector3.zero;
 
+    private void Start()
+    {
+        if (Target == null) Target = GameObject.FindGameObjectWithTag("Player")?.transform;
+    }
+
     /// <summary>ターゲットが視界内に入っているか判定する</summary>
     /// <param name="target">判定するターゲット</param>
     /// <param name="degree">視野角(度数法)</param>
@@ -22,7 +27,11 @@ public class SightController : MonoBehaviour
     /// <returns>true -> 発見 | false -> 未発見 or 見失った</returns>
     public bool SearchTarget()
     {
-        if (Target == null) return false;
+        if (Target == null)
+        {
+            Debug.LogWarning("Target isn't assigned");
+            return false;
+        }
         // ターゲットのいる方向
         Vector3 toTarget = Target.position - transform.position;
         // 自身の正面を 0°として、180°まで判定すればいいので、cos(視野角/2)を求める。
@@ -44,7 +53,6 @@ public class SightController : MonoBehaviour
         // ターゲットを凝視する。
         transform.LookAt(Target);
         // ターゲットとの間の障害物があるかを調べるためにRaycastを飛ばす。
-        Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.white);
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange))
         {
             if (hit.collider.tag == $"{ Target.gameObject.tag }")
@@ -58,7 +66,7 @@ public class SightController : MonoBehaviour
                 return false;
             }
         }
-
+        Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.white);
         return false;
     }
 }

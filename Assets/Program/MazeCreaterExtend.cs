@@ -146,7 +146,6 @@ public class MazeCreaterExtend : MonoBehaviour
             }
             if (i < maze.Length - 1) str += "\n";
         }
-        Debug.Log(str);
         return str;
     }
 
