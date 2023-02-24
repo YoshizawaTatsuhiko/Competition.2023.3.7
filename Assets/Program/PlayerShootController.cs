@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // 日本語対応
 [ExecuteInEditMode, RequireComponent(typeof(LineRenderer))]
 
-public class PlayerShootController : MonoBehaviour
+public class PlayerShootController : ShooterBase
 {
     [SerializeField]
     private Transform _muzzle = null;
@@ -21,14 +21,7 @@ public class PlayerShootController : MonoBehaviour
     [SerializeField]
     private LayerMask _layerMask = 0;
     private RaycastHit _hit = new RaycastHit();
-    private LineRenderer _line = null;
-    [SerializeField]
     private float _addDamage = 1f;
-
-    private void Start()
-    {
-        _line = GetComponent<LineRenderer>();
-    }
 
     private void Update()
     {
@@ -47,9 +40,9 @@ public class PlayerShootController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            DrawLaser(hitPosition);
+            StartCoroutine(DrawLaser(_muzzle.position, hitPosition));
 
-            if (_hit.collider?.tag is "Enemy")
+            if (_hit.collider?.tag == "Enemy")
             {
                 if (_hit.collider.gameObject.TryGetComponent(out HPController hp))
                 {
@@ -58,29 +51,11 @@ public class PlayerShootController : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            DrawLaser(_muzzle.position);
-        }
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * _shootRange);
-    }
-
-    /// <summary>銃弾の軌跡を表す光線</summary>
-    /// <param name="destination">光線の終点</param>
-    private void DrawLaser(Vector3 destination)
-    {
-        Vector3[] positions = { _muzzle.position, destination };
-        _line.positionCount = positions.Length;
-        _line.SetPositions(positions);
-    }
-
-    private IEnumerator WaitForSeconds()
-    {
-        yield return new WaitForSeconds(0.1f);
     }
 }
