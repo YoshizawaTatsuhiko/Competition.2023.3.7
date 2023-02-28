@@ -17,23 +17,16 @@ public class SightController : MonoBehaviour
 
     private void Start()
     {
-        if (Target == null) Target = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (Target == null) _target = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
 
     /// <summary>ターゲットが視界内に入っているか判定する</summary>
-    /// <param name="target">判定するターゲット</param>
-    /// <param name="degree">視野角(度数法)</param>
-    /// <param name="range">索敵範囲</param>
     /// <returns>true -> 発見 | false -> 未発見 or 見失った</returns>
     public bool SearchTarget()
     {
-        if (Target == null)
-        {
-            Debug.LogWarning("Target isn't assigned");
-            return false;
-        }
+        if (_target == null) return false;
         // ターゲットのいる方向
-        Vector3 toTarget = Target.position - transform.position;
+        Vector3 toTarget = _target.position - transform.position;
         // 自身の正面を 0°として、180°まで判定すればいいので、cos(視野角/2)を求める。
         float cosHalf = Mathf.Cos(_searchDegree / 2 * Mathf.Deg2Rad);
         // 自身の正面とターゲットがいる方向とのcosθの値を計算する。
@@ -43,19 +36,17 @@ public class SightController : MonoBehaviour
     }
 
     /// <summary>ターゲットとの間に障害物があるか判定する</summary>
-    /// <param name="target">判定するターゲット</param>
-    /// <param name="range">索敵範囲</param>
     /// <returns>true -> 障害物ナシ | false -> 障害物アリ</returns>
     public bool LookTarget()
     {
         // ターゲットを見失った時に見る方向。
         _lineOfSight = transform.forward;
         // ターゲットを凝視する。
-        transform.LookAt(Target);
+        transform.LookAt(_target);
         // ターゲットとの間の障害物があるかを調べるためにRaycastを飛ばす。
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _searchRange))
         {
-            if (hit.collider.tag == $"{ Target.gameObject.tag }")
+            if (hit.collider.tag == $"{ _target.gameObject.tag }")
             {
                 return true;
             }
@@ -66,7 +57,6 @@ public class SightController : MonoBehaviour
                 return false;
             }
         }
-        Debug.DrawRay(transform.position, transform.forward * _searchRange, Color.white);
         return false;
     }
 }
