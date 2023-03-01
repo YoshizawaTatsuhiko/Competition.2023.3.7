@@ -24,7 +24,9 @@ public class EnemyShootController : ShooterBase
 
     private void Update()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _shootRange, _layerMask))
+        Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _shootRange);
+
+        if (hit.collider.gameObject.layer == _layerMask)
         {
             _timer += Time.deltaTime;
 
@@ -32,10 +34,9 @@ public class EnemyShootController : ShooterBase
             {
                 StartCoroutine(DrawLaser(_muzzle.position, hit.point));
 
-                if (hit.collider.gameObject.TryGetComponent(out HPController objectHP))
+                if (hit.collider.gameObject.TryGetComponent(out LifeController objectLife))
                 {
-                    objectHP.CurrentHP -= _addDamage;
-                    Debug.Log($"{hit.collider.gameObject.name}'s Health = {objectHP.CurrentHP}");
+                    objectLife.ChangeLife(_addDamage);
                 }
                 _timer = 0f;
             }

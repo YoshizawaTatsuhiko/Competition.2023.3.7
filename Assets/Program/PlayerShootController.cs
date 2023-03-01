@@ -26,9 +26,9 @@ public class PlayerShootController : ShooterBase
     private void Update()
     {
         Vector3 hitPosition = _muzzle.transform.position + _muzzle.transform.forward * _shootRange;
+        Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out _hit, _shootRange);
 
-        if (Physics.Raycast(Camera.main.transform.position,
-            Camera.main.transform.forward, out _hit, _shootRange, _layerMask))
+        if (_hit.collider?.gameObject.layer == _layerMask)
         {
             _crosshair.color = _hitColor;
             hitPosition = _hit.point;
@@ -44,10 +44,9 @@ public class PlayerShootController : ShooterBase
 
             if (_hit.collider?.tag == "Enemy")
             {
-                if (_hit.collider.gameObject.TryGetComponent(out HPController hp))
+                if (_hit.collider.gameObject.TryGetComponent(out LifeController objectLife))
                 {
-                    hp.CurrentHP -= _addDamage;
-                    Debug.Log($"{_hit.collider.gameObject.name}'s Health = {hp.CurrentHP}");
+                    objectLife.ChangeLife(_addDamage);
                 }
             }
         }
