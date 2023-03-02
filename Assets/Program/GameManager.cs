@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,10 +17,16 @@ public class GameManager : MonoBehaviour
     private UnityEvent _gameOver = new();
     /// <summary>ゲームが始まった時にPlayerを生成する座標</summary>
     private Vector3 _startPoint = new();
-    private HPController _playerHP = new HPController();
+    private LifeController _playerHP = new LifeController();
     /// <summary>Goalを出現するために起動するGimmick</summary>
     private GimmickCheck _gimmickCheck = null;
     private GoalController _goal = null;
+    /// <summary>Pauseを登録するイベント</summary>
+    private event Action _onPause = null;
+    public event Action OnPause { add => _onPause += value; remove => _onPause -= value; }
+    /// <summary>Pauseを解除するイベント</summary>
+    private event Action _onResume = null;
+    public event Action OnResume { add => _onResume += value; remove => _onResume -= value; }
 
     private void OnEnable()
     {
@@ -31,11 +38,12 @@ public class GameManager : MonoBehaviour
     {
         // Playerを生成する座標を見つけておく。
         _startPoint = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
+        if (_startPoint == null) _startPoint = Vector3.zero;
         _startPoint.y += 1f;
 
         // ResourcesフォルダーからPlayerを生成する。
         GameObject player = Instantiate(Resources.Load<GameObject>("Player Prefab"), _startPoint, Quaternion.identity);
-        if (player.TryGetComponent(out HPController hp)) _playerHP = hp;
+        if (player.TryGetComponent(out LifeController hp)) _playerHP = hp;
         Instantiate(Resources.Load<GameObject>("Marker"));
 
         _gimmickCheck = FindObjectOfType<GimmickCheck>();
@@ -44,14 +52,30 @@ public class GameManager : MonoBehaviour
     }
 
     private bool _isGameFinish = false;
+    private int _pushCount = 0;
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _pushCount++;
+
+            if (_pushCount % 2 == 1)
+            {
+                _onPause?.Invoke();
+            }
+            else
+            {
+                _onResume?.Invoke();
+            }
+            if (_pushCount >= 10) _pushCount = 0;
+        }
+
         if (!_isGameFinish)
         {
             _timeLimit = Mathf.Clamp(_timeLimit -= Time.fixedDeltaTime, 0f, _timeLimit);
+            if (_timeText) _timeText.text = _timeLimit.ToString("F2");
         }
-        if(_timeText) _timeText.text = _timeLimit.ToString("F2");
 
         // 起動したGimmickの数が一定数に達したら、Goalを出現させる。
         if (_gimmickCheck?.GimmickWakeUpCount == 2)
@@ -61,26 +85,31 @@ public class GameManager : MonoBehaviour
         // Playerがゴールに到着したら、ゲームクリア
         if (_goal.GoalJudge) GameClear();
         // 制限時間 or PlayerのHPがなくなったら、ゲームオーバー
-        if (_timeLimit == 0f || _playerHP.CurrentHP == 0f) GameOver();
+        if (_timeLimit == 0f || _playerHP.CurrentLife <= 0f) GameOver();
     }
 
-    /// <summary>ゲームクリアした時にEventを呼ぶ</summary>
+    /// <summary>ゲームクリアした時に呼ぶEvent</summary>
     private void GameClear()
     {
         _gameClear.Invoke();
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        _isGameFinish = true;
+        CommonBehaviour();
         Debug.Log("Complete");
     }
 
-    /// <summary>ゲームオーバーした時にEventを呼ぶ</summary>
+    /// <summary>ゲームオーバーした時に呼ぶEvent</summary>
     private void GameOver()
     {
         _gameOver.Invoke();
+        CommonBehaviour();
+        Debug.Log("Mission Failed");
+    }
+
+    /// <summary>GameClear()、GameOver()に共通する処理</summary>
+    private void CommonBehaviour()
+    {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         _isGameFinish = true;
-        Debug.Log("Mission Failed");
+        _onPause?.Invoke();
     }
 }
