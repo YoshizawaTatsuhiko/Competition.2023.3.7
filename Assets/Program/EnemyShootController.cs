@@ -22,11 +22,14 @@ public class EnemyShootController : ShooterBase
         if (!_muzzle) _muzzle = transform;
     }
 
-    private void Update()
+    public void EnemyShooter()
     {
-        Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _shootRange);
+        Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _shootRange, _layerMask);
+        Debug.DrawRay(transform.position, transform.forward * _shootRange);
 
-        if (hit.collider.gameObject.layer == _layerMask)
+        if (!hit.collider) return;
+
+        if (hit.collider.gameObject.TryGetComponent(out PlayerController player))
         {
             _timer += Time.deltaTime;
 
@@ -34,7 +37,7 @@ public class EnemyShootController : ShooterBase
             {
                 StartCoroutine(DrawLaser(_muzzle.position, hit.point));
 
-                if (hit.collider.gameObject.TryGetComponent(out LifeController objectLife))
+                if (player.gameObject.TryGetComponent(out LifeController objectLife))
                 {
                     objectLife.ChangeLife(_addDamage);
                 }
@@ -45,11 +48,5 @@ public class EnemyShootController : ShooterBase
         {
             _timer = 0f;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawRay(transform.position, transform.forward * _shootRange);
     }
 }

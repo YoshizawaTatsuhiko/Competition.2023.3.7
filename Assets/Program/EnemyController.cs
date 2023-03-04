@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(SightController))]
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IPauseResume
 {
     [SerializeField]
     private float _moveSpeed = 1f;
@@ -14,9 +14,32 @@ public class EnemyController : MonoBehaviour
     private float _range = 1f;
     [SerializeField]
     private LayerMask _layerMask = 0;
+    private EnemyShootController _enemyShooter = null;
     [SerializeField]
     private int[] _rotateDegree = new int[0];
     private float _saveSpeed;
+
+    //=====Pause Resume 用変数=====
+    private GameManager _gameManager = null;
+    private Vector3 _tempSaveVelocity = Vector3.zero;
+    private Vector3 _tempSaveAngularVelocity = Vector3.zero;
+
+    private void Awake()
+    {
+        _gameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void OnEnable()
+    {
+        _gameManager.OnPause += Pause;
+        _gameManager.OnResume += Resume;
+    }
+
+    private void OnDisable()
+    {
+        _gameManager.OnPause -= Pause;
+        _gameManager.OnResume -= Resume;
+    }
 
     private void Start()
     {
@@ -24,6 +47,7 @@ public class EnemyController : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         _sight = GetComponent<SightController>();
         _saveSpeed = _moveSpeed;
+        _enemyShooter = FindObjectOfType<EnemyShootController>();
     }
 
     private void FixedUpdate()
@@ -37,6 +61,7 @@ public class EnemyController : MonoBehaviour
             {
                 return;  // ターゲットが障害物に隠れたら、索敵しなおす。
             }
+            _enemyShooter.EnemyShooter();
         }
         else if(Physics.Raycast(transform.position, transform.forward, _range, _layerMask))  // 障害物に一定距離まで近づいた時
         {
@@ -52,5 +77,21 @@ public class EnemyController : MonoBehaviour
 
         _rigidbody.velocity = new Vector3(
                 transform.forward.x * _moveSpeed, _rigidbody.velocity.y, transform.forward.z * _moveSpeed);
+    }
+
+    public void Pause()
+    {
+        _tempSaveVelocity = _rigidbody.velocity;
+        _tempSaveAngularVelocity = _rigidbody.angularVelocity;
+        _rigidbody.Sleep();
+        _rigidbody.isKinematic = true;
+    }
+
+    public void Resume()
+    {
+        _rigidbody.isKinematic = false;
+        _rigidbody.WakeUp();
+        _rigidbody.angularVelocity = _tempSaveAngularVelocity;
+        _rigidbody.velocity = _tempSaveVelocity;
     }
 }

@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 0}
-  _searchDegree: 30
+  _searchDegree: 45
   _searchRange: 5
 --- !u!114 &7781633320135555824
 MonoBehaviour:
@@ -261,10 +261,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4529552123608786147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82462e6edc07e834ebcf826df3246544, type: 3}
+  m_Script: {fileID: 11500000, guid: 392db1cc8490cdc4a964396e029ab40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHP: 5
+  _maxLife: 7
+  _onReduceLife:
+    m_PersistentCalls:
+      m_Calls: []
+  _onAddLife:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1769616407968656422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,7 +287,7 @@ MonoBehaviour:
   _shootRange: 5
   _layerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 200
   _addDamage: 1
   _lookTime: 2
 --- !u!120 &-2993850950268496344
