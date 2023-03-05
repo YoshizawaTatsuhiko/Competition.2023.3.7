@@ -23,13 +23,18 @@ public class PlayerShootController : ShooterBase
     private RaycastHit _hit = new RaycastHit();
     private float _addDamage = 1f;
 
-    private void Update()
+    public void PlayerShooter()
     {
-        Vector3 hitPosition = _muzzle.transform.position + _muzzle.transform.forward * _shootRange;
-        Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out _hit, _shootRange);
+        string judge = "";
+        Vector3 hitPosition = _muzzle.transform.position + Camera.main.transform.forward * _shootRange;
+        Ray ray = Camera.main.ScreenPointToRay(_crosshair.rectTransform.position);
+        Physics.Raycast(ray, out _hit, _shootRange, _layerMask);
 
-        if (_hit.collider?.gameObject.layer == _layerMask)
+        if (_hit.collider == null) return;
+
+        if (_hit.collider.gameObject.TryGetComponent(out EnemyController Enemy))
         {
+            judge = Enemy.gameObject.tag;
             _crosshair.color = _hitColor;
             hitPosition = _hit.point;
         }
@@ -42,7 +47,7 @@ public class PlayerShootController : ShooterBase
         {
             StartCoroutine(DrawLaser(_muzzle.position, hitPosition));
 
-            if (_hit.collider?.tag == "Enemy")
+            if (_hit.collider?.tag == judge)
             {
                 if (_hit.collider.gameObject.TryGetComponent(out LifeController objectLife))
                 {

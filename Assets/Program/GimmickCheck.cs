@@ -9,7 +9,7 @@ public class GimmickCheck : MonoBehaviour
 
     public int GimmickWakeUpCount { get; private set; }
 
-    private void FixedUpdate()
+    public void GimmickJudgement()
     {
         if (Input.GetMouseButtonDown(1))
         {
