@@ -7,7 +7,7 @@ using System.Linq;
 
 class MazeGenerator : MonoBehaviour
 {
-    [SerializeField, Tooltip("MAX SIZE = 32")]
+    [SerializeField, Tooltip("MAX SIZE = 173\nSIZE が 80以上になると重くなる")]
     private int _size = 5;
     public int Width { get => _size < 5 ? 5 : _size; }
     public int Height { get => _size < 5 ? 5 : _size; }
@@ -29,7 +29,8 @@ class MazeGenerator : MonoBehaviour
     /// <summary>屋根を生成する座標(迷路を生成してから屋根をかぶせるため)</summary>
     private Vector3 _ceilingPos = Vector3.zero;
     [SerializeField]
-    private GameObject _enemySpawn = null;
+    private GameObject _enemySpawner = null;
+    private Dictionary<string, GameObject> _objDic = new Dictionary<string, GameObject>();
     /// <summary>作成した迷路</summary>
     private MazeCreaterExtend _maze = null;
     /// <summary>迷路の設計図</summary>
@@ -39,6 +40,13 @@ class MazeGenerator : MonoBehaviour
 
     private void Awake()
     {
+        _objDic.Add("W", _wall);
+        _objDic.Add("F", _path);
+        _objDic.Add("S", _start);
+        _objDic.Add("G", _goal);
+        _objDic.Add("C", _gimic);
+        _objDic.Add("E", _enemySpawner);
+
         _maze = GetComponent<MazeCreaterExtend>();
         string[] mazeInfo = _maze.GenerateMaze(Width, Height).Split("\n");
         _bluePrint = new string[mazeInfo[0].Length, mazeInfo.Length - 1];
@@ -53,6 +61,9 @@ class MazeGenerator : MonoBehaviour
         SetSpotRandom(_bluePrint, _coordinateList, "C");
         SetSpotRandom(_bluePrint, _coordinateList, "E");
         SetSpotRandom(_bluePrint, _coordinateList, "E");
+        SetSpotRandom(_bluePrint, _coordinateList, "E");
+        SetSpotRandom(_bluePrint, _coordinateList, "E");
+        FindFurthestPoint(_bluePrint, point, _coordinateList, "E");
         FindFurthestPoint(_bluePrint, point, _coordinateList, "E");
 
         GameObject wallParent = new GameObject("Wall Parent");
@@ -65,18 +76,17 @@ class MazeGenerator : MonoBehaviour
         {
             for (int j = 0; j < _bluePrint.GetLength(1); j++)
             {
-                if (_bluePrint[i, j] == "W") Instantiate(_wall,
-                    new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, wallParent.transform);
-                if (_bluePrint[i, j] == "F") Instantiate(_path,
-                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, floorParent.transform);
-                if (_bluePrint[i, j] == "S") Instantiate(_start,
-                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
-                if (_bluePrint[i, j] == "G") Instantiate(_goal,
-                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
-                if (_bluePrint[i, j] == "C") Instantiate(_gimic,
-                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
-                if (_bluePrint[i, j] == "E") Instantiate(_enemySpawn,
-                    new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
+                string chara = _bluePrint[i, j];
+
+                if (_objDic.ContainsKey(chara))
+                {
+                    if(chara == "W")
+                        Instantiate(_objDic[chara],
+                            new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, wallParent.transform);
+                    else
+                        Instantiate(_objDic[chara] == null ? _path : _objDic[chara],
+                            new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, floorParent.transform);
+                }
             }
         }
         _ceilingPos.y = Vector3.zero.y + _wall.transform.localScale.y / 2f;
