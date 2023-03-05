@@ -153,12 +153,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8d730b36aedb34f8b96ed08c837aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _size: 20
-  _go:
-  - {fileID: 2300711114671985902, guid: 985541ab4ae44d446b58b718fd0fa4c8, type: 3}
-  - {fileID: 6061515945289184263, guid: 219a7d8eec55d2f478dd32c5f4acd899, type: 3}
-  - {fileID: 7161635772294468448, guid: 253de044a5670b84cb6a0df9baf69309, type: 3}
-  - {fileID: 4949632326020090230, guid: 8965b529ed85e28499978b023604cead, type: 3}
+  _size: 30
+  _wall: {fileID: 2300711114671985902, guid: 985541ab4ae44d446b58b718fd0fa4c8, type: 3}
+  _path: {fileID: 318363114498489092, guid: e979ca96013c71040b6f0440b85885ad, type: 3}
+  _start: {fileID: 0}
+  _goal: {fileID: 0}
+  _gimic: {fileID: 0}
+  _ceiling: {fileID: 0}
+  _enemySpawner: {fileID: 0}
 --- !u!4 &79758537
 Transform:
   m_ObjectHideFlags: 0
