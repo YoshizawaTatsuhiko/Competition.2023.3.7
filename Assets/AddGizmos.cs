@@ -5,7 +5,7 @@ using UnityEngine;
 // 参考資料
 // https://github.com/code-beans/GizmoExtensions/blob/master/src/GizmosExtensions.cs
 
-namespace MyGizmos
+namespace NewGizmos
 {
     /// <summary>新しいGizmosを追加する</summary>
     public static class AddGizmos
@@ -24,11 +24,6 @@ namespace MyGizmos
 
             //増加量を求める
             int addition = Mathf.RoundToInt(degree / segments);
-        }
-
-        public static void DrawCircle()
-        {
-
         }
     }
 }
