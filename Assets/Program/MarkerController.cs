@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class MarkerController : MonoBehaviour
 {
+    private Transform _player = null;
     private Vector3 _playerPos = Vector3.zero;
 
-    private void Update()
+    private void Start()
     {
-        _playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 
-        if (_playerPos == null)
-        {
-            _playerPos = Vector3.zero;
-        }
+    private void FixedUpdate()
+    {
+        if (!_player) return;
+
+        _playerPos = _player.position;
 
         float x = Mathf.Round(_playerPos.x);
         float z = Mathf.Round(_playerPos.z);
