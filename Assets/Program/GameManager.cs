@@ -7,6 +7,9 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
+    private MazeGenerator _mazeGenerator = null;
+    [SerializeField]
+    private bool _isUnlimitedTime = false;
     [SerializeField]
     private float _timeLimit = 60f;
     [SerializeField]
@@ -16,8 +19,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private UnityEvent _gameOver = new();
     /// <summary>ゲームが始まった時にPlayerを生成する座標</summary>
-    private Vector3 _startPoint = new();
-    private LifeController _playerHP = new LifeController();
+    private Vector3 _startPoint = Vector3.zero;
+    private GameObject _player = null;
+    private MouseSensitivity _mouseSensitivity = null;
+    private LifeController _playerLife = null;
     /// <summary>Goalを出現するために起動するGimmick</summary>
     private GimmickCheck _gimmickCheck = null;
     private GoalController _goal = null;
@@ -27,28 +32,50 @@ public class GameManager : MonoBehaviour
     /// <summary>Pauseを解除するイベント</summary>
     private event Action _onResume = null;
     public event Action OnResume { add => _onResume += value; remove => _onResume -= value; }
+    [SerializeField]
+    private GameObject _option = null;
 
-    private void OnEnable()
+    private void Awake()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+        _mazeGenerator = FindObjectOfType<MazeGenerator>();
+        _mazeGenerator.GenerateMazeFromBlueprint();
 
-    private void Start()
-    {
         // Playerを生成する座標を見つけておく。
         _startPoint = GameObject.FindGameObjectWithTag("StartPoint").transform.position;
         if (_startPoint == null) _startPoint = Vector3.zero;
         _startPoint.y += 1f;
+    }
 
-        // ResourcesフォルダーからPlayerを生成する。
-        GameObject player = Instantiate(Resources.Load<GameObject>("Player Prefab"), _startPoint, Quaternion.identity);
-        if (player.TryGetComponent(out LifeController hp)) _playerHP = hp;
+    private void OnEnable()
+    {
+        _player = FindObjectOfType<PlayerController>()?.gameObject;
+
+        if (_player != null) _player.transform.position = _startPoint;
+
+        if (_player == null)
+        {
+            // ResourcesフォルダーからPlayerを生成する。
+            _player = Instantiate(Resources.Load<GameObject>("Player Prefab"), _startPoint, Quaternion.identity);
+        }
+        _playerLife = _player.GetComponentInChildren<LifeController>();
         Instantiate(Resources.Load<GameObject>("Marker"));
+
+        _mouseSensitivity = FindObjectOfType<MouseSensitivity>();
+        _mouseSensitivity.Player = _player;
+    }
+
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         _gimmickCheck = FindObjectOfType<GimmickCheck>();
         _goal = FindObjectOfType<GoalController>();
         _goal?.gameObject.SetActive(false);
+
+        if (_isUnlimitedTime) _timeLimit = Mathf.Infinity;
+
+        if (_option) _option.SetActive(false);
     }
 
     private bool _isGameFinish = false;
@@ -63,10 +90,16 @@ public class GameManager : MonoBehaviour
             if (_pushCount % 2 == 1)
             {
                 _onPause?.Invoke();
+                _option?.SetActive(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
             else
             {
                 _onResume?.Invoke();
+                _option?.SetActive(false);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
             if (_pushCount >= 10) _pushCount = 0;
         }
@@ -85,7 +118,7 @@ public class GameManager : MonoBehaviour
         // Playerがゴールに到着したら、ゲームクリア
         if (_goal.GoalJudge) GameClear();
         // 制限時間 or PlayerのHPがなくなったら、ゲームオーバー
-        if (_timeLimit == 0f || _playerHP.CurrentLife <= 0f) GameOver();
+        if (_timeLimit == 0f || _playerLife.CurrentLife <= 0f) GameOver();
     }
 
     /// <summary>ゲームクリアした時に呼ぶEvent</summary>
@@ -97,7 +130,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>ゲームオーバーした時に呼ぶEvent</summary>
-    private void GameOver()
+    public void GameOver()
     {
         _gameOver.Invoke();
         CommonBehaviour();
