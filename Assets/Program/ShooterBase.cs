@@ -18,7 +18,7 @@ public class ShooterBase : MonoBehaviour
             Vector3[] positions = { origin, destination };
             line.positionCount = positions.Length;
             line.SetPositions(positions);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.07f);
             line.SetPosition(1, origin);
         }
     }

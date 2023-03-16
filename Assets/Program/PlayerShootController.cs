@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 // 日本語対応
 [ExecuteInEditMode, RequireComponent(typeof(LineRenderer))]
@@ -21,6 +22,8 @@ public class PlayerShootController : ShooterBase
     [SerializeField]
     private LayerMask _layerMask = 0;
     private RaycastHit _hit = new RaycastHit();
+    [SerializeField]
+    private UnityEvent _onShot = new();
     private float _addDamage = 1f;
 
     public void PlayerShooter()
@@ -46,6 +49,7 @@ public class PlayerShootController : ShooterBase
         if (Input.GetMouseButtonDown(0))
         {
             StartCoroutine(DrawLaser(_muzzle.position, hitPosition));
+            _onShot.Invoke();
 
             if (_hit.collider?.tag == judge)
             {
