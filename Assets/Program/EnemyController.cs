@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour, IPauseResume
     private GameManager _gameManager = null;
     private Vector3 _tempSaveVelocity = Vector3.zero;
     private Vector3 _tempSaveAngularVelocity = Vector3.zero;
+    private bool _isPause = false;
 
     private void Awake()
     {
@@ -52,7 +53,7 @@ public class EnemyController : MonoBehaviour, IPauseResume
 
     private void FixedUpdate()
     {
-        if (_sight.SearchTarget())  // ターゲットを発見したとき
+        if (_sight.SearchTarget() && !_isPause)  // ターゲットを発見したとき
         {
             // ターゲットを見つけたら、動きを止める。
             _moveSpeed = 0f;
@@ -81,6 +82,7 @@ public class EnemyController : MonoBehaviour, IPauseResume
 
     public void Pause()
     {
+        _isPause = true;
         _tempSaveVelocity = _rigidbody.velocity;
         _tempSaveAngularVelocity = _rigidbody.angularVelocity;
         _rigidbody.Sleep();
@@ -93,5 +95,6 @@ public class EnemyController : MonoBehaviour, IPauseResume
         _rigidbody.WakeUp();
         _rigidbody.angularVelocity = _tempSaveAngularVelocity;
         _rigidbody.velocity = _tempSaveVelocity;
+        _isPause = false;
     }
 }
