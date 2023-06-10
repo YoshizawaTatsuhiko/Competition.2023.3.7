@@ -47,7 +47,7 @@ MonoBehaviour:
   _object:
   - {fileID: 4529552123608786147, guid: 01a964723dc06ff48849218765132b8a, type: 3}
   _simultaneousCount: 3
-  _interval: 10
+  _interval: 5
 --- !u!1 &5855038780123614714
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +111,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2805f4d27369884aa5477bc2e912024, type: 2}
+  - {fileID: 2100000, guid: 11729fa27a679db4fbeedeff9e7512fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
