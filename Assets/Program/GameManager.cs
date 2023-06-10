@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Text _timeText = null;
     [SerializeField]
+    private Text _lifeText = null;
+    [SerializeField]
     private UnityEvent _gameClear = new();
     [SerializeField]
     private UnityEvent _gameOver = new();
@@ -101,7 +103,7 @@ public class GameManager : MonoBehaviour
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            if (_pushCount >= 10) _pushCount = 0;
+            if (_pushCount >= 100) _pushCount = 0;
         }
 
         if (!_isGameFinish)
@@ -109,6 +111,8 @@ public class GameManager : MonoBehaviour
             _timeLimit = Mathf.Clamp(_timeLimit -= Time.fixedDeltaTime, 0f, _timeLimit);
             if (_timeText) _timeText.text = _timeLimit.ToString("F2");
         }
+
+        if (_lifeText) _lifeText.text = $"Life:{_playerLife.CurrentLife}";
 
         // 起動したGimmickの数が一定数に達したら、Goalを出現させる。
         if (_gimmickCheck?.GimmickWakeUpCount == 2)
