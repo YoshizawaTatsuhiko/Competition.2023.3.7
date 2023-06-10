@@ -77,23 +77,23 @@ class MazeGenerator : MonoBehaviour
 
         _pathHeight = Vector3.zero.y + -_wall.transform.localScale.y / 2f;
 
-        for (int i = 0; i < _blueprint.GetLength(0); i++)
+        for (int i = 0; i < _blueprint.GetLength(1); i++)
         {
-            for (int j = 0; j < _blueprint.GetLength(1); j++)
+            for (int j = 0; j < _blueprint.GetLength(0); j++)
             {
-                string chara = _blueprint[i, j];
+                string chara = _blueprint[j, i];
 
                 if (_objDic.ContainsKey(chara))
                 {
                     if (chara == "W")
                         Instantiate(_objDic[chara],
-                            new Vector3(i - Width / 2, 0f, j - Height / 2), Quaternion.identity, wallParent.transform);
+                            new Vector3(j - Width / 2, 0f, i - Height / 2), Quaternion.identity, wallParent.transform);
                     else if (chara == "F")
                         Instantiate(_objDic[chara] == null ? _path : _objDic[chara],
-                                new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, floorParent.transform);
+                                new Vector3(j - Width / 2, _pathHeight, i - Height / 2), Quaternion.identity, floorParent.transform);
                     else
                         Instantiate(_objDic[chara] == null ? _path : _objDic[chara],
-                            new Vector3(i - Width / 2, _pathHeight, j - Height / 2), Quaternion.identity, otherParent.transform);
+                            new Vector3(j - Width / 2, _pathHeight, i - Height / 2), Quaternion.identity, otherParent.transform);
                 }
             }
         }
@@ -105,7 +105,7 @@ class MazeGenerator : MonoBehaviour
     /// <summary>一次元配列を二次元配列に変換する(string型限定)</summary>
     /// <param name="array">string型の一次元配列</param>
     /// <param name="twoDimensionalArray">string型の二次元配列</param>
-    private string[,] To2DArray(string[] array, string[,] twoDimensionalArray)
+    private void To2DArray(string[] array, string[,] twoDimensionalArray)
     {
         for (int i = 0; i < twoDimensionalArray.GetLength(0); i++)
         {
@@ -114,7 +114,6 @@ class MazeGenerator : MonoBehaviour
                 twoDimensionalArray[i, j] = array[i][j].ToString();
             }
         }
-        return twoDimensionalArray;
     }
 
     #region Event Method

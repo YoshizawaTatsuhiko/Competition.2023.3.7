@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour, IPauseResume
         dir.y = _rigidbody.velocity.y;
         _rigidbody.velocity = dir;
 
-        // Playerの始点操作系統の処理
+        // Playerの視点操作系統の処理
         Vector3 camDir = Camera.main.transform.forward;
         camDir.y = 0;
         transform.forward = camDir;
