@@ -27,10 +27,10 @@ public class LifeController : MonoBehaviour
 
     /// <summary>Lifeの値を変化させる</summary>
     /// <param name="changeValue">変化させる値</param>
-    /// <param name="conditions">true -> Life を changeValue 減らす | false -> Life を changeValue 増やす</param>
-    public void ChangeLife(float changeValue, bool conditions = true)
+    /// <param name="isReduceLife">true -> Life を changeValue 減らす | false -> Life を changeValue 増やす</param>
+    public void ChangeLife(float changeValue, bool isReduceLife = true)
     {
-        if (conditions)
+        if (isReduceLife)
         {
             _currentLife -= changeValue;
             _onReduceLife.Invoke();

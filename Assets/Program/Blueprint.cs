@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 日本語対応
@@ -8,7 +6,7 @@ public class Blueprint : MonoBehaviour
     /// <summary>迷路を文字列にして表示する</summary>
     /// <param name="maze">迷路</param>
     /// <returns>文字列化した迷路</returns>
-    public string ArrayToString(string[,] maze)
+    protected string ArrayToString(string[,] maze)
     {
         string str = "";
 

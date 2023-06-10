@@ -11,7 +11,7 @@ public class DebugSystem : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         // R-Keyが入力される度に、同じシーンが読み込まれる。
         if (Input.GetKeyDown(KeyCode.R))
