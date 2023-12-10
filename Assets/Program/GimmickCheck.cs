@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GimmickCheck : MonoBehaviour
 {
@@ -18,10 +19,6 @@ public class GimmickCheck : MonoBehaviour
                 if (hit.collider.gameObject.TryGetComponent(out GimmickController gimmick))
                 {
                     GimmickWakeUpCount += gimmick.GimmickWakeUp();
-                }
-                else
-                {
-                    Debug.Log("Useless Act");
                 }
             }
         }

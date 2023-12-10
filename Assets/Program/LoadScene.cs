@@ -37,4 +37,9 @@ public class LoadScene : MonoBehaviour
             _image.DOFade(1f, _fadeTime).OnComplete(() => SceneManager.LoadScene(sceneName));
         }
     }
+
+    public void ApplicationExit()
+    {
+        Application.Quit();
+    }
 }

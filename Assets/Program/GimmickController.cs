@@ -8,7 +8,7 @@ public class GimmickController : MonoBehaviour
     private bool _isOnce = true;
 
     /// <summary>ギミックが起動したかどうかをint型で返す</summary>
-    /// <returns>Start Up => 1 | Not Started => 0</returns>
+    /// <returns>起動 => 1 | 未起動 or 起動済み => 0</returns>
     public int GimmickWakeUp()
     {
         if (_isOnce)

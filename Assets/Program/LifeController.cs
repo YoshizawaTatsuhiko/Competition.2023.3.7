@@ -40,6 +40,5 @@ public class LifeController : MonoBehaviour
             _currentLife += changeValue;
             _onAddLife.Invoke();
         }
-        Debug.Log($"{gameObject.name}'s Health = {_currentLife}");
     }
 }
