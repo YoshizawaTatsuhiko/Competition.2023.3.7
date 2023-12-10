@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     private UnityEvent _gameOver = new();
     /// <summary>ゲームが始まった時にPlayerを生成する座標</summary>
     private Vector3 _startPoint = Vector3.zero;
-    private GameObject _player = null;
+    private PlayerController _player = null;
     private MouseSensitivity _mouseSensitivity = null;
     private LifeController _playerLife = null;
     /// <summary>Goalを出現するために起動するGimmick</summary>
@@ -50,16 +50,17 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _player = FindObjectOfType<PlayerController>()?.gameObject;
+        _player = FindObjectOfType<PlayerController>();
 
         if (_player != null) _player.transform.position = _startPoint;
 
         if (_player == null)
         {
             // ResourcesフォルダーからPlayerを生成する。
-            _player = Instantiate(Resources.Load<GameObject>("Player Prefab"), _startPoint, Quaternion.identity);
+            _player = Instantiate(Resources.Load<GameObject>("Player Prefab"), _startPoint, Quaternion.identity)
+                .GetComponentInChildren<PlayerController>();
         }
-        _playerLife = _player.GetComponentInChildren<LifeController>();
+        _playerLife = _player.GetComponent<LifeController>();
         Instantiate(Resources.Load<GameObject>("Marker"));
 
         _mouseSensitivity = FindObjectOfType<MouseSensitivity>();
@@ -95,6 +96,7 @@ public class GameManager : MonoBehaviour
                 _option?.SetActive(true);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
+                _mouseSensitivity.ViewLock();
             }
             else
             {
@@ -102,13 +104,14 @@ public class GameManager : MonoBehaviour
                 _option?.SetActive(false);
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
+                _mouseSensitivity.ViewUnlock();
             }
             if (_pushCount >= 100) _pushCount = 0;
         }
 
         if (!_isGameFinish)
         {
-            _timeLimit = Mathf.Clamp(_timeLimit -= Time.fixedDeltaTime, 0f, _timeLimit);
+            _timeLimit = Mathf.Clamp(_timeLimit -= Time.deltaTime, 0f, _timeLimit);
             if (_timeText) _timeText.text = _timeLimit.ToString("F2");
         }
 
@@ -148,5 +151,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         _isGameFinish = true;
         _onPause?.Invoke();
+        _mouseSensitivity.ViewLock();
     }
 }
