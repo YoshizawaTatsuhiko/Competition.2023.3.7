@@ -45,8 +45,10 @@ public class PlayerController : MonoBehaviour, IPauseResume
 
     void FixedUpdate()
     {
+        if (_isPause) return;
+
         // Playerの操作系統の処理
-        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")) * _moveSpeed;
+        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")).normalized * _moveSpeed;
         dir = Camera.main.transform.TransformDirection(dir);
         dir.y = _rigidbody.velocity.y;
         _rigidbody.velocity = dir;
@@ -72,12 +74,12 @@ public class PlayerController : MonoBehaviour, IPauseResume
         _tempSaveVelocity = _rigidbody.velocity;
         _tempSaveAngularVelocity = _rigidbody.angularVelocity;
         _rigidbody.Sleep();
-        _rigidbody.isKinematic = true;
+        //_rigidbody.isKinematic = true;
     }
 
     public void Resume()
     {
-        _rigidbody.isKinematic = false;
+        //_rigidbody.isKinematic = false;
         _rigidbody.WakeUp();
         _rigidbody.angularVelocity = _tempSaveAngularVelocity;
         _rigidbody.velocity = _tempSaveVelocity;
