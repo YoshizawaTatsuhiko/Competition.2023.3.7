@@ -18,6 +18,8 @@ public class PlayerShootController : ShooterBase
     [SerializeField]
     private Color _hitColor = Color.red;
     [SerializeField]
+    private Color _hitGimmickColor = Color.yellow;
+    [SerializeField]
     private float _shootRange = 1f;
     [SerializeField]
     private LayerMask _layerMask = 0;
@@ -40,6 +42,10 @@ public class PlayerShootController : ShooterBase
             judge = Enemy.gameObject.tag;
             _crosshair.color = _hitColor;
             hitPosition = _hit.point;
+        }
+        else if (_hit.collider.gameObject.TryGetComponent(out GimmickController gimmick))
+        {
+            _crosshair.color = _hitGimmickColor;
         }
         else
         {
