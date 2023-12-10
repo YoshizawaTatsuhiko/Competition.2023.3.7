@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using Cinemachine;
 
 // 日本語対応
-public class MouseSensitivity : MonoBehaviour, IPauseResume
+public class MouseSensitivity : MonoBehaviour
 {
-    public GameObject Player { private get; set; }
+    public PlayerController Player { get; set; }
     private CinemachineVirtualCamera _virtualCamera = null;
     private CinemachinePOV _playerView = null;
     [SerializeField]
@@ -16,27 +16,6 @@ public class MouseSensitivity : MonoBehaviour, IPauseResume
     private float _maxSensitivity = 200f;
     [SerializeField]
     private float _minSensitivity = 40f;
-
-    //=====Pause Resume用変数=====
-    private GameManager _gameManager = null;
-    //private float _tempSeveValue = 0f;
-
-    //private void Awake()
-    //{
-    //    _gameManager = FindObjectOfType<GameManager>();
-    //}
-
-    //private void OnEnable()
-    //{
-    //    _gameManager.OnPause += Pause;
-    //    _gameManager.OnResume += Resume;
-    //}
-
-    //private void OnDisable()
-    //{
-    //    _gameManager.OnPause -= Pause;
-    //    _gameManager.OnResume -= Resume;
-    //}
 
     private void Start()
     {
@@ -50,7 +29,7 @@ public class MouseSensitivity : MonoBehaviour, IPauseResume
             _mouseSensitivitySlider.minValue = _minSensitivity;
             _mouseSensitivitySlider.value = _maxSensitivity;
         }
-        _virtualCamera = Player.GetComponentInChildren<CinemachineVirtualCamera>();
+        _virtualCamera = Player.transform.parent.GetComponentInChildren<CinemachineVirtualCamera>();
         _playerView = _virtualCamera?.GetCinemachineComponent<CinemachinePOV>();
     }
 
@@ -62,13 +41,18 @@ public class MouseSensitivity : MonoBehaviour, IPauseResume
         _playerView.m_VerticalAxis.m_MaxSpeed = _mouseSensitivitySlider.value;
     }
 
-    public void Pause()
+    private float _saveSensitivity = 0.0f;
+
+    public void ViewLock()
     {
-        
+        _saveSensitivity = _mouseSensitivitySlider.value;
+        _playerView.m_HorizontalAxis.m_MaxSpeed = 0.0f;
+        _playerView.m_VerticalAxis.m_MaxSpeed = 0.0f;
     }
 
-    public void Resume()
+    public void ViewUnlock()
     {
-        
+        _playerView.m_HorizontalAxis.m_MaxSpeed = _saveSensitivity;
+        _playerView.m_VerticalAxis.m_MaxSpeed = _saveSensitivity;
     }
 }
